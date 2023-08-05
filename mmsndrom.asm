@@ -2353,13 +2353,14 @@ FFDF: DF 8A    stx  $8A
 FFE1: CE FE 6E ldx  #$FE6E
 FFE4: DF 8E    stx  $8E
 FFE6: 7E FA A4 jmp  $FAA4
-;;
-FFE9: FF FF FF stx  $FFFF
-FFEC: FF FF FF stx  $FFFF
-FFEF: FF FF FF stx  $FFFF
-FFF2: FF FF FF stx  $FFFF
-FFF5: FF FF FF stx  $FFFF
-FFF8: F0 2E F0 subb $2EF0
-FFFB: 01       nop  
-FFFC: F0 39 F0 subb $39F0
-FFFF: 01       nop  
+;;(padding)
+FFE9: FF FF FF
+FFEC: FF FF FF
+FFEF: FF FF FF
+FFF2: FF FF FF
+FFF5: FF FF FF
+;;VECTORS
+FFF8: F02E						;;IRQ
+FFFA: F001						;;SETUP
+FFFC: F039						;;NMI
+FFFE: F001						;;SETUP
