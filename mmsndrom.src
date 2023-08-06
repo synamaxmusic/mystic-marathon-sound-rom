@@ -42,9 +42,13 @@
 *			AND A CAST OF THOUSANDS......
 *
 *
-;;     MYSTIC MARATHON PROGRAMMERS: KRISTINA DONOFRIO, KEN GRAHAM
-;;	 MYSTIC MARATHON STAFF: JOHN NEWCOMER, PAM ERICKSON
-;;		    JILL CHITTENDEN, JAN HENDRICKS
+;;     MYSTIC MARATHON CREDITS:
+;;     LEAD PROGRAMMER: KRISTINA DONOFRIO
+;;     ADDITIONAL PROGRAMMER: KEN GRAHAM
+;;     ARTISTS: JILL CHITTENDEN, JAN HENDRICKS 
+;;	   MARQUEE ART: PAM ERICKSON
+;;     MYSTIC MARATHON STAFF: JOHN NEWCOMER
+;;     TREE ENEMY CONCEPT IDEAS: PYTHON ANGHELO
 ;;
 ;;---------------------------------------------------------------------
 ;;
@@ -970,129 +974,10 @@ E592: 07       tpa
 E593: 08       inx  
 E594: 18       illegal
 E595: 19       daa  
-E596: 20 4D    bra  $E5E5
-E598: 59       rolb 
-E599: 53       comb 
-E59A: 54       lsrb 
-E59B: 49       rola 
-E59C: 43       coma 
-E59D: 20 4D    bra  $E5EC
-E59F: 41       illegal
-E5A0: 52       illegal
-E5A1: 41       illegal
-E5A2: 54       lsrb 
-E5A3: 48       asla 
-E5A4: 4F       clra 
-E5A5: 4E       illegal
-E5A6: 20 2D    bra  $E5D5
-E5A8: 20 43    bra  $E5ED
-E5AA: 4F       clra 
-E5AB: 50       negb 
-E5AC: 59       rolb 
-E5AD: 52       illegal
-E5AE: 49       rola 
-E5AF: 47       asra 
-E5B0: 48       asla 
-E5B1: 54       lsrb 
-E5B2: 20 28    bra  $E5DC
-E5B4: 43       coma 
-E5B5: 29 20    bvs  $E5D7
-E5B7: 31       ins  
-E5B8: 39       rts  
-E5B9: 38       illegal
-E5BA: 33       pulb 
-E5BB: 20 57    bra  $E614
-E5BD: 49       rola 
-E5BE: 4C       inca 
-E5BF: 4C       inca 
-E5C0: 49       rola 
-E5C1: 41       illegal
-E5C2: 4D       tsta 
-E5C3: 53       comb 
-E5C4: 20 45    bra  $E60B
-E5C6: 4C       inca 
-E5C7: 45       illegal
-E5C8: 43       coma 
-E5C9: 54       lsrb 
-E5CA: 52       illegal
-E5CB: 4F       clra 
-E5CC: 4E       illegal
-E5CD: 49       rola 
-E5CE: 43       coma 
-E5CF: 53       comb 
-E5D0: 20 49    bra  $E61B
-E5D2: 4E       illegal
-E5D3: 43       coma 
-E5D4: 2E 20    bgt  $E5F6
-E5D6: 41       illegal
-E5D7: 4C       inca 
-E5D8: 4C       inca 
-E5D9: 20 52    bra  $E62D
-E5DB: 49       rola 
-E5DC: 47       asra 
-E5DD: 48       asla 
-E5DE: 54       lsrb 
-E5DF: 53       comb 
-E5E0: 20 52    bra  $E634
-E5E2: 45       illegal
-E5E3: 53       comb 
-E5E4: 45       illegal
-E5E5: 52       illegal
-E5E6: 56       rorb 
-E5E7: 45       illegal
-E5E8: 44       lsra 
-E5E9: 20 20    bra  $E60B
-E5EB: 4D       tsta 
-E5EC: 59       rolb 
-E5ED: 53       comb 
-E5EE: 54       lsrb 
-E5EF: 49       rola 
-E5F0: 43       coma 
-E5F1: 20 4D    bra  $E640
-E5F3: 41       illegal
-E5F4: 52       illegal
-E5F5: 41       illegal
-E5F6: 54       lsrb 
-E5F7: 48       asla 
-E5F8: 4F       clra 
-E5F9: 4E       illegal
-E5FA: 20 2D    bra  $E629
-E5FC: 20 43    bra  $E641
-E5FE: 52       illegal
-E5FF: 45       illegal
-E600: 41       illegal
-E601: 54       lsrb 
-E602: 45       illegal
-E603: 44       lsra 
-E604: 20 42    bra  $E648
-E606: 59       rolb 
-E607: 3A       illegal
-E608: 20 4B    bra  $E655
-E60A: 52       illegal
-E60B: 49       rola 
-E60C: 53       comb 
-E60D: 54       lsrb 
-E60E: 49       rola 
-E60F: 4E       illegal
-E610: 41       illegal
-E611: 20 56    bra  $E669
-E613: 2E 20    bgt  $E635
-E615: 52       illegal
-E616: 55       illegal
-E617: 4B       illegal
-E618: 55       illegal
-E619: 49       rola 
-E61A: 5A       decb 
-E61B: 41       illegal
-E61C: 20 44    bra  $E662
-E61E: 4F       clra 
-E61F: 4E       illegal
-E620: 4F       clra 
-E621: 46       rora 
-E622: 52       illegal
-E623: 49       rola 
-E624: 4F       clra 
-E625: 20 FF    bra  $E626
+;;
+E596: " MYSTIC MARATHON - COPYRIGHT (C) 1983 WILLIAMS ELECTRONICS INC. ALL RIGHTS RESERVED  MYSTIC MARATHON - CREATED BY: KRISTINA V. RUKUIZA DONOFRIO" 
+;;
+E626: FF
 E627: FF FF FF 
 E62A: FF FF FF 
 E62D: FF FF FF 
