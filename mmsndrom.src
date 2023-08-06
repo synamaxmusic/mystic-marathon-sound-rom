@@ -27,7 +27,7 @@
 ;  routines found in earlier Williams games.  This might be the last
 ;  game from Williams to use the Walsh Function Sound Machine.
 ;
-;  The biggest different with the MM sound rom compared to earlier
+;  The biggest difference with the MM sound rom compared to earlier
 ;  games is size: this is a 2K ROM (addressed at $E000), instead of 1K.
 ;  The first kilobyte has several synth routines, while the main program
 ;  is located in the remaining half at $F000.
