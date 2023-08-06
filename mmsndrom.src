@@ -29,6 +29,8 @@
 ;
 ;  The biggest different with the MM sound rom compared to earlier
 ;  games is size: this is a 2K ROM (addressed at $E000), instead of 1K.
+;  The first kilobyte has several synth routines, while the main program
+;  is located in the remaining half at $F000.
 ;
 ;  Mystic Marathon has the largest amount of different GWAVE "presets",
 ;  with 24 different sounds found in SVTAB.  Inferno only has 12!
@@ -1846,6 +1848,9 @@ EEF4: FF FF FF
 EEF7: FF FF FF 
 EEFA: FF FF FF 
 EEFD: FF FF FF 
+*
+* DIAGNOSTIC PROCESSING HERE
+*
 EF00: CE FF FF ldx  #$FFFF
 EF03: 5F       clrb 
 EF04: E9 00    adcb (x+$00)
@@ -1854,6 +1859,9 @@ EF07: 8C E0 00 cmpx #$E000
 EF0A: 26 F8    bne  $EF04
 EF0C: F7 F0 00 stb  $F000
 EF0F: 3E       wai  
+;;
+;;   It looks like the diagnostic test doesn't play any sound?
+;;
 EF10: FF FF FF 
 EF13: FF FF FF 
 EF16: FF FF FF 
