@@ -27,17 +27,1916 @@
 ;  routines found in earlier Williams games.  This might be the last
 ;  game from Williams to use the Walsh Function Sound Machine.
 ;
+;  The biggest different with the MM sound rom compared to earlier
+;  games is size: this is a 2K ROM (addressed at $E000), instead of 1K.
+;
 ;  Mystic Marathon has the largest amount of different GWAVE "presets",
 ;  with 24 different sounds found in SVTAB.  Inferno only has 12!
 ;
 ;;---------------------------------------------------------------------
-;
+;;
 *PROGRAMMERS: EUGENE P. JARVIS, SAM DICKER,RANDY PFEIFFER,JOHN KOTLARIK
 *		PAUL G. DUSSAULT,CARY W. KOLKER,TIM  MURPHY
 *			AND A CAST OF THOUSANDS......
 *
 *
-;; MYSTIC MARATHON PROGRAMMERS: KRISTINA DONOFRIO, KEN GRAHAM
+;;     MYSTIC MARATHON PROGRAMMERS: KRISTINA DONOFRIO, KEN GRAHAM
+;;	 MYSTIC MARATHON STAFF: JOHN NEWCOMER, PAM ERICKSON
+;;		    JILL CHITTENDEN, JAN HENDRICKS
+;;
+;;---------------------------------------------------------------------
+;;
+;;   Sound ID $52 is a potentially unused organ tune.  The ORGTAB
+;;   that contains all the notes is located here at the very beginning.
+;;
+*
+* NOTE DEFINITIONS AND ALL THAT JAZZ
+*
+AF1	EQU	$F847
+A1	EQU	$F83F
+BF1	EQU	$F837
+B1	EQU	$F830
+C1	EQU	$F829
+CS1	EQU	$F823
+D1	EQU	$F81D
+EF1	EQU	$F817
+E1	EQU	$F812
+F1	EQU	$F80D
+FS1	EQU	$F808
+G2	EQU	$F804
+AF2	EQU	$7C47
+A2	EQU	$7C3F
+BF2	EQU	$7C37
+B2	EQU	$7C30
+C2	EQU	$7C29
+CS2	EQU	$7C23
+D2	EQU	$7C1D
+EF2	EQU	$7C17
+E2	EQU	$7C12
+F2	EQU	$7C0D
+FS2	EQU	$7C08
+G3	EQU	$7C04
+AF3	EQU	$3E47
+A3	EQU	$3E3F
+BF3	EQU	$3E37
+B3	EQU	$3E30
+C3	EQU	$3E29
+CS3	EQU	$3E23
+D3	EQU	$3E1D
+EF3	EQU	$3E17
+E3	EQU	$3E12
+F3	EQU	$3E0D
+FS3	EQU	$3E08
+G4	EQU	$3E04
+AF4	EQU	$1F47
+A4	EQU	$1F3F
+BF4	EQU	$1F37
+B4	EQU	$1F30
+C4	EQU	$1F29
+CS4	EQU	$1F23
+D4	EQU	$1F1D
+EF4	EQU	$1F17
+E4	EQU	$1F12
+F4	EQU	$1F0D
+FS4	EQU	$1F08
+;; (Actual Mystic Marathon Notes)
+A3	EQU	$383F
+G4	EQU	$3804
+F3	EQU	$380D
+C3	EQU	$3829
+BF3	EQU	$3837
+;;
+RS	EQU	$0029		;;(rest note)
+*
+* ORGAN TUNE TABLE
+* OSCILLATOR MASK(1),DELAY(1),DURATION(2)
+*
+;ORGTAB
+E000: CC     			;FCB  	51*4  ;;(51 "notes", includes note off events)
+;;
+E001: 383F			;;(A3)
+E003: 05FC 			;;(note duration...same value as the first note in SINISTAR)
+E005: 0029			;;(rest note)
+E007: 071E			;;(rest note duration...same value as the last note in SINISTAR)
+E009: 3804       		;;(G4)
+E00B: 0555       
+E00D: 0029,071E			;;(combining FDB values into one line for easier reading)
+E011: 380D       		;;(F3)
+E013: 04C0
+E015: 0029,071E
+E019: 3804      		;;(G4)
+E01B: 0555      
+E01D: 0029,071E     
+E021: 383F     			;;(A3)
+E023: 05FC     
+E025: 0029,071E     
+E029: 3804			;;(G4)
+E02B: 0555
+E02D: 0029,071E
+E031: 380D			;;(F3)
+E033: 04C0
+E035: 0029,071E
+E039: 3804			;;(G4)
+E03B: 0555
+E03D: 0029,071E
+E041: 383F 			;;(A3)
+E043: 05FC
+E045: 0029,071E
+E049: 3804			;;(G4)
+E04B: 0555 
+E04D: 0029,071E
+E051: 380D			;;(F3)
+E053: 04C0
+E055: 0029,071E
+E059: 3804			;;(G4)
+E05B: 071C
+E05D: 0029,071E
+E061: 380D			;;(F3)
+E063: 04C0
+E065: 0029,071E
+E069: 3829			;;(C3)
+E06B: 071E
+E06D: 0029,071E
+E071: 3837			;;(BF3)
+E073: 032B
+E075: 0029,071E
+E079: 383F			;;(A3)
+E07B: 02FE 
+E07D: 0029,071E
+E081: 3837			;;(BF3)
+E083: 032B
+E085: 0029,071E
+E089: 3829			;;(C3)
+E08B: 071E
+E08D: 0029,071E
+E091: 3837			;;(BF3)
+E093: 032B
+E095: 0029,071E
+E099: 383F			;;(A3)
+E09B: 02FE
+E09D: 0029,071E
+E0A1: 3837			;;(BF3)
+E0A3: 032B
+E0A5: 0029,071E
+E0A9: 3829			;;(C3)
+E0AB: 071E
+E0AD: 0029,071E
+E0B1: 3837			;;(BF3)
+E0B3: 032B 
+E0B5: 0029,071E
+E0B9: 383F			;;(A3)
+E0BB: 02FE 
+E0BD: 0029,071E
+E0C1: 3837			;;(BF3)
+E0C3: 043A
+E0C5: 0029,071E
+E0C9: 383F			;;(A3)
+E0CB: 02FE 
+;; ORGAN ROUTINE
+E0CD: 4F       clra
+E0CE: 7F 00 90 clr  $0090		;;(ORGFLG)
+E0D1: 97 87    sta  $87			;TUNE NUMBER
+E0D3: CE E0 00 ldx  #$E000		;;(#ORGTAB)
+E0D6: A6 00    lda  (x+$00)
+E0D8: 27 2D    beq  $E107
+E0DA: 7A 00 87 dec  $0087
+E0DD: 20 06    bra  $E0E5
+E0DF: 4C       inca 
+E0E0: BD E1 6D jsr  $E16D
+E0E3: 20 F1    bra  $E0D6
+E0E5: 08       inx  
+E0E6: DF 8E    stx  $8E
+E0E8: BD E1 6D jsr  $E16D
+E0EB: DF 8C    stx  $8C
+E0ED: DE 8E    ldx  $8E
+E0EF: A6 00    lda  (x+$00)
+E0F1: 97 93    sta  $93
+E0F3: A6 01    lda  (x+$01)
+E0F5: EE 02    ldx  (x+$02)
+E0F7: DF 91    stx  $91
+E0F9: 8D 0D    bsr  $E108
+E0FB: DE 8E    ldx  $8E
+E0FD: 08       inx  
+E0FE: 08       inx  
+E0FF: 08       inx  
+E100: 08       inx  
+E101: DF 8E    stx  $8E
+E103: 9C 8C    cmpx $8C
+E105: 26 E8    bne  $E0EF
+E107: 39       rts  
+E108: CE 00 94 ldx  #$0094
+E10B: 81 00    cmpa #$00
+E10D: 27 15    beq  $E124
+E10F: 81 03    cmpa #$03
+E111: 27 09    beq  $E11C
+E113: C6 01    ldb  #$01
+E115: E7 00    stb  (x+$00)
+E117: 08       inx  
+E118: 80 02    suba #$02
+E11A: 20 EF    bra  $E10B
+E11C: C6 91    ldb  #$91
+E11E: E7 00    stb  (x+$00)
+E120: 6F 01    clr  (x+$01)
+E122: 08       inx  
+E123: 08       inx  
+E124: C6 7E    ldb  #$7E
+E126: E7 00    stb  (x+$00)
+E128: C6 E1    ldb  #$E1
+E12A: E7 01    stb  (x+$01)
+E12C: C6 32    ldb  #$32
+E12E: E7 02    stb  (x+$02)
+E130: DE 91    ldx  $91
+E132: 4F       clra 
+E133: F6 00 88 ldb  $0088
+E136: 5C       incb 
+E137: D7 88    stb  $88
+E139: D4 93    andb $93
+E13B: 54       lsrb 
+E13C: 89 00    adca #$00
+E13E: 54       lsrb 
+E13F: 89 00    adca #$00
+E141: 54       lsrb 
+E142: 89 00    adca #$00
+E144: 54       lsrb 
+E145: 89 00    adca #$00
+E147: 54       lsrb 
+E148: 89 00    adca #$00
+E14A: 54       lsrb 
+E14B: 89 00    adca #$00
+E14D: 54       lsrb 
+E14E: 89 00    adca #$00
+E150: 48       asla 
+E151: 48       asla 
+E152: 48       asla 
+E153: 48       asla 
+E154: 48       asla 
+E155: B7 20 02 sta  $2002
+E158: 09       dex  
+E159: 27 03    beq  $E15E
+E15B: 7E 00 94 jmp  $0094
+E15E: 39       rts  
+E15F: 96 81    lda  $81
+E161: 44       lsra 
+E162: 98 81    eora $81
+E164: 44       lsra 
+E165: 44       lsra 
+E166: 76 00 80 ror  $0080
+E169: 76 00 81 ror  $0081
+E16C: 39       rts  
+;;
+E16D: DF 8C    stx  $8C
+E16F: 9B 8D    adda $8D
+E171: 97 8D    sta  $8D
+E173: 96 8C    lda  $8C
+E175: 89 00    adca #$00
+E177: 97 8C    sta  $8C
+E179: DE 8C    ldx  $8C
+E17B: 39       rts  
+;;
+E17C: C6 BF    ldb  #$BF
+E17E: 4F       clra 
+E17F: B7 20 02 sta  $2002
+E182: 17       tba  
+E183: 4A       deca 
+E184: 26 FD    bne  $E183
+E186: 17       tba  
+E187: 43       coma 
+E188: B7 20 02 sta  $2002
+E18B: 8D D2    bsr  $E15F
+E18D: 4A       deca 
+E18E: 26 FD    bne  $E18D
+E190: 5A       decb 
+E191: 26 EB    bne  $E17E
+E193: 39       rts  
+E194: C6 FF    ldb  #$FF
+E196: 7F 20 02 clr  $2002
+E199: BD E1 5F jsr  $E15F
+E19C: 96 81    lda  $81
+E19E: 20 00    bra  $E1A0
+E1A0: 4A       deca 
+E1A1: 26 FB    bne  $E19E
+E1A3: 73 20 02 com  $2002
+E1A6: C5 01    bitb #$01
+E1A8: 26 03    bne  $E1AD
+E1AA: 7A 20 02 dec  $2002
+E1AD: 17       tba  
+E1AE: 4A       deca 
+E1AF: 26 FD    bne  $E1AE
+E1B1: 73 20 02 com  $2002
+E1B4: 5A       decb 
+E1B5: 26 E2    bne  $E199
+E1B7: 39       rts  
+E1B8: C6 01    ldb  #$01
+E1BA: 7F 20 02 clr  $2002
+E1BD: BD E1 5F jsr  $E15F
+E1C0: 96 81    lda  $81
+E1C2: 20 00    bra  $E1C4
+E1C4: 4A       deca 
+E1C5: 26 FB    bne  $E1C2
+E1C7: 73 20 02 com  $2002
+E1CA: C5 01    bitb #$01
+E1CC: 26 03    bne  $E1D1
+E1CE: 7A 20 02 dec  $2002
+E1D1: 17       tba  
+E1D2: 4A       deca 
+E1D3: 26 FD    bne  $E1D2
+E1D5: 73 20 02 com  $2002
+E1D8: 5C       incb 
+E1D9: 26 E2    bne  $E1BD
+E1DB: 39       rts  
+E1DC: 01       nop  
+E1DD: 03       illegal
+E1DE: FF 80 FF stx  $80FF
+E1E1: 00       illegal
+E1E2: CE E1 DC ldx  #$E1DC
+E1E5: BD F8 36 jsr  $F836
+E1E8: 7E F8 4F jmp  $F84F
+E1EB: 48       asla 
+E1EC: 03       illegal
+E1ED: 01       nop  
+E1EE: 0C       clc  
+E1EF: FF 00 86 stx  $0086
+E1F2: FF 97 89 stx  $9789
+E1F5: CE E1 EB ldx  #$E1EB
+E1F8: 8D EB    bsr  $E1E5
+E1FA: 8D 02    bsr  $E1FE
+E1FC: 20 FA    bra  $E1F8
+E1FE: 96 89    lda  $89
+E200: 80 08    suba #$08
+E202: 2A 03    bpl  $E207
+E204: 97 89    sta  $89
+E206: 39       rts  
+E207: 32       pula 
+E208: 32       pula 
+E209: 39       rts  
+E20A: C6 11    ldb  #$11
+E20C: D7 AC    stb  $AC
+E20E: 86 FE    lda  #$FE
+E210: 97 91    sta  $91
+E212: 86 9F    lda  #$9F
+E214: D6 AC    ldb  $AC
+E216: CE 01 C0 ldx  #$01C0
+E219: 09       dex  
+E21A: 27 20    beq  $E23C
+E21C: F7 00 90 stb  $0090
+E21F: B7 20 02 sta  $2002
+E222: 09       dex  
+E223: 27 17    beq  $E23C
+E225: 7A 00 90 dec  $0090
+E228: 26 F8    bne  $E222
+E22A: 09       dex  
+E22B: 27 0F    beq  $E23C
+E22D: D7 90    stb  $90
+E22F: 73 20 02 com  $2002
+E232: 09       dex  
+E233: 27 07    beq  $E23C
+E235: 7A 00 90 dec  $0090
+E238: 26 F8    bne  $E232
+E23A: 20 DD    bra  $E219
+E23C: D0 91    subb $91
+E23E: C1 10    cmpb #$10
+E240: 22 D4    bhi  $E216
+E242: 39       rts  
+E243: 4F       clra 
+E244: B7 20 02 sta  $2002
+E247: 97 87    sta  $87
+E249: 4F       clra 
+E24A: 91 87    cmpa $87
+E24C: 26 03    bne  $E251
+E24E: 73 20 02 com  $2002
+E251: C6 12    ldb  #$12
+E253: 5A       decb 
+E254: 26 FD    bne  $E253
+E256: 4C       inca 
+E257: 2A F1    bpl  $E24A
+E259: 73 20 02 com  $2002
+E25C: 7C 00 87 inc  $0087
+E25F: 2A E8    bpl  $E249
+E261: 39       rts  
+E262: CE 00 90 ldx  #$0090
+E265: 6F 00    clr  (x+$00)
+E267: 08       inx  
+E268: 8C 00 A0 cmpx #$00A0
+E26B: 26 F8    bne  $E265
+E26D: 86 18    lda  #$18
+E26F: 97 90    sta  $90
+E271: CE 00 90 ldx  #$0090
+E274: 86 C0    lda  #$C0
+E276: 97 87    sta  $87
+E278: 5F       clrb 
+E279: A6 01    lda  (x+$01)
+E27B: AB 00    adda (x+$00)
+E27D: A7 01    sta  (x+$01)
+E27F: 2A 02    bpl  $E283
+E281: DB 87    addb $87
+E283: 74 00 87 lsr  $0087
+E286: 08       inx  
+E287: 08       inx  
+E288: 8C 00 A0 cmpx #$00A0
+E28B: 26 EC    bne  $E279
+E28D: F7 20 02 stb  $2002
+E290: 7C 00 88 inc  $0088
+E293: 26 DC    bne  $E271
+E295: CE 00 90 ldx  #$0090
+E298: 5F       clrb 
+E299: A6 00    lda  (x+$00)
+E29B: 27 0B    beq  $E2A8
+E29D: 81 37    cmpa #$37
+E29F: 26 04    bne  $E2A5
+E2A1: C6 19    ldb  #$19
+E2A3: E7 02    stb  (x+$02)
+E2A5: 6A 00    dec  (x+$00)
+E2A7: 5C       incb 
+E2A8: 08       inx  
+E2A9: 08       inx  
+E2AA: 8C 00 A0 cmpx #$00A0
+E2AD: 26 EA    bne  $E299
+E2AF: 5D       tstb 
+E2B0: 26 BF    bne  $E271
+E2B2: 39       rts  
+E2B3: 86 20    lda  #$20
+E2B5: 97 92    sta  $92
+E2B7: 97 95    sta  $95
+E2B9: 86 01    lda  #$01
+E2BB: CE 00 01 ldx  #$0001
+E2BE: C6 FF    ldb  #$FF
+E2C0: 97 90    sta  $90
+E2C2: DF 93    stx  $93
+E2C4: D7 91    stb  $91
+E2C6: D6 92    ldb  $92
+E2C8: 96 81    lda  $81
+E2CA: 44       lsra 
+E2CB: 44       lsra 
+E2CC: 44       lsra 
+E2CD: 98 81    eora $81
+E2CF: 44       lsra 
+E2D0: 76 00 80 ror  $0080
+E2D3: 76 00 81 ror  $0081
+E2D6: 86 00    lda  #$00
+E2D8: 24 02    bcc  $E2DC
+E2DA: 96 91    lda  $91
+E2DC: B7 20 02 sta  $2002
+E2DF: DE 93    ldx  $93
+E2E1: 09       dex  
+E2E2: 26 FD    bne  $E2E1
+E2E4: 5A       decb 
+E2E5: 26 E1    bne  $E2C8
+E2E7: D6 91    ldb  $91
+E2E9: D0 90    subb $90
+E2EB: 27 09    beq  $E2F6
+E2ED: DE 93    ldx  $93
+E2EF: 08       inx  
+E2F0: 96 95    lda  $95
+E2F2: 27 D0    beq  $E2C4
+E2F4: 20 CC    bra  $E2C2
+E2F6: 39       rts  
+E2F7: 86 01    lda  #$01
+E2F9: 97 97    sta  $97
+E2FB: C6 03    ldb  #$03
+E2FD: 97 96    sta  $96
+E2FF: 86 FF    lda  #$FF
+E301: B7 20 02 sta  $2002
+E304: D7 92    stb  $92
+E306: D6 92    ldb  $92
+E308: 96 81    lda  $81
+E30A: 44       lsra 
+E30B: 44       lsra 
+E30C: 44       lsra 
+E30D: 98 81    eora $81
+E30F: 44       lsra 
+E310: 76 00 80 ror  $0080
+E313: 76 00 81 ror  $0081
+E316: 24 03    bcc  $E31B
+E318: 73 20 02 com  $2002
+E31B: 96 96    lda  $96
+E31D: 4A       deca 
+E31E: 26 FD    bne  $E31D
+E320: 5A       decb 
+E321: 26 E5    bne  $E308
+E323: 96 96    lda  $96
+E325: 9B 97    adda $97
+E327: 97 96    sta  $96
+E329: 26 DB    bne  $E306
+E32B: 39       rts  
+E32C: 7F 20 04 clr  $2004
+E32F: CE E3 73 ldx  #$E373
+E332: DF 92    stx  $92
+E334: DE 92    ldx  $92
+E336: A6 00    lda  (x+$00)
+E338: 27 33    beq  $E36D
+E33A: E6 01    ldb  (x+$01)
+E33C: C4 F0    andb #$F0
+E33E: D7 91    stb  $91
+E340: E6 01    ldb  (x+$01)
+E342: 08       inx  
+E343: 08       inx  
+E344: DF 92    stx  $92
+E346: 97 90    sta  $90
+E348: C4 0F    andb #$0F
+E34A: 96 91    lda  $91
+E34C: B7 20 02 sta  $2002
+E34F: 96 90    lda  $90
+E351: CE 00 05 ldx  #$0005
+E354: 09       dex  
+E355: 26 FD    bne  $E354
+E357: 4A       deca 
+E358: 26 F7    bne  $E351
+E35A: 7F 20 02 clr  $2002
+E35D: 96 90    lda  $90
+E35F: CE 00 05 ldx  #$0005
+E362: 09       dex  
+E363: 26 FD    bne  $E362
+E365: 4A       deca 
+E366: 26 F7    bne  $E35F
+E368: 5A       decb 
+E369: 26 DF    bne  $E34A
+E36B: 20 C7    bra  $E334
+E36D: 86 80    lda  #$80
+E36F: B7 20 04 sta  $2004
+E372: 39       rts  
+E373: 01       nop  
+E374: FC       illegal
+E375: 02       illegal
+E376: FC       illegal
+E377: 03       illegal
+E378: F8 04 F8 eorb $04F8
+E37B: 06       tap  
+E37C: F8 08 F4 eorb $08F4
+E37F: 0C       clc  
+E380: F4 10 F4 andb $10F4
+E383: 20 F2    bra  $E377
+E385: 40       nega 
+E386: F1 60 F1 cmpb $60F1
+E389: 80 F1    suba #$F1
+E38B: A0 F1    suba (x+$F1)
+E38D: C0 F1    subb #$F1
+E38F: 00       illegal
+E390: 00       illegal
+E391: 8D 03    bsr  $E396
+E393: 7E F1 E1 jmp  $F1E1
+;;
+E396: 16       tab  
+E397: 58       aslb 
+E398: 1B       aba  
+E399: 1B       aba  
+E39A: 1B       aba  
+E39B: CE E3 FC ldx  #$E3FC
+E39E: BD E1 6D jsr  $E16D
+E3A1: A6 00    lda  (x+$00)
+E3A3: 16       tab  
+E3A4: 84 0F    anda #$0F
+E3A6: 97 92    sta  $92
+E3A8: 54       lsrb 
+E3A9: 54       lsrb 
+E3AA: 54       lsrb 
+E3AB: 54       lsrb 
+E3AC: D7 91    stb  $91
+E3AE: A6 01    lda  (x+$01)
+E3B0: 16       tab  
+E3B1: 54       lsrb 
+E3B2: 54       lsrb 
+E3B3: 54       lsrb 
+E3B4: 54       lsrb 
+E3B5: D7 93    stb  $93
+E3B7: 84 0F    anda #$0F
+E3B9: 97 87    sta  $87
+E3BB: DF 8A    stx  $8A
+E3BD: CE F2 C0 ldx  #$F2C0
+E3C0: 7A 00 87 dec  $0087
+E3C3: 2B 08    bmi  $E3CD
+E3C5: A6 00    lda  (x+$00)
+E3C7: 4C       inca 
+E3C8: BD E1 6D jsr  $E16D
+E3CB: 20 F3    bra  $E3C0
+E3CD: DF 96    stx  $96
+E3CF: BD F2 6B jsr  $F26B
+E3D2: DE 8A    ldx  $8A
+E3D4: A6 02    lda  (x+$02)
+E3D6: 97 98    sta  $98
+E3D8: BD F2 7D jsr  $F27D
+E3DB: DE 8A    ldx  $8A
+E3DD: A6 03    lda  (x+$03)
+E3DF: 97 94    sta  $94
+E3E1: A6 04    lda  (x+$04)
+E3E3: 97 95    sta  $95
+E3E5: A6 05    lda  (x+$05)
+E3E7: 16       tab  
+E3E8: A6 06    lda  (x+$06)
+E3EA: CE E4 96 ldx  #$E496
+E3ED: BD E1 6D jsr  $E16D
+E3F0: 17       tba  
+E3F1: DF 99    stx  $99
+E3F3: 7F 00 A1 clr  $00A1
+E3F6: BD E1 6D jsr  $E16D
+E3F9: DF 9B    stx  $9B
+E3FB: 39       rts  
+E3FC: 81 24    cmpa #$24
+E3FE: 03       illegal
+E3FF: 00       illegal
+E400: 00       illegal
+E401: 16       tab  
+E402: 31       ins  
+E403: 41       illegal
+E404: 45       illegal
+E405: 00       illegal
+E406: 00       illegal
+E407: 00       illegal
+E408: 0F       sei  
+E409: 5B       illegal
+E40A: F4 12 00 andb $1200
+E40D: 00       illegal
+E40E: 00       illegal
+E40F: 14       illegal
+E410: 47       asra 
+E411: 21 3F    brn  $E452
+E413: 12       illegal
+E414: FE 01 20 ldx  $0120
+E417: 1B       aba  
+E418: F8 5B 07 eorb $5B07
+E41B: 03       illegal
+E41C: 01       nop  
+E41D: 05       illegal
+E41E: 94 E3    anda $E3
+E420: 12       illegal
+E421: 03       illegal
+E422: 00       illegal
+E423: 02       illegal
+E424: 06       tap  
+E425: 9A 16    ora  $16
+E427: 17       tba  
+E428: 00       illegal
+E429: 00       illegal
+E42A: 00       illegal
+E42B: 0A       clv  
+E42C: 10       sba  
+E42D: A4 25    anda (x+$25)
+E42F: FE FE 01 ldx  $FE01
+E432: 02       illegal
+E433: FE FE 1A ldx  $FE1A
+E436: 00       illegal
+E437: 00       illegal
+E438: 00       illegal
+E439: 08       inx  
+E43A: 6E 82    jmp  (x+$82)
+E43C: 22 00    bhi  $E43E
+E43E: 00       illegal
+E43F: 00       illegal
+E440: 18       illegal
+E441: C6 21    ldb  #$21
+E443: 30       tsx  
+E444: 00       illegal
+E445: FF 30 20 stx  $3020
+E448: 0D       sec  
+E449: B2 10 05 sbca $1005
+E44C: 00       illegal
+E44D: 00       illegal
+E44E: 14       illegal
+E44F: A4 FF    anda (x+$FF)
+E451: 1F       illegal
+E452: 14       illegal
+E453: 01       nop  
+E454: 01       nop  
+E455: 04       illegal
+E456: 1C       illegal
+E457: 1C       illegal
+E458: 1F       illegal
+E459: 00       illegal
+E45A: FF FF 08 stx  $FF08
+E45D: 88 3D    eora #$3D
+E45F: 5C       incb 
+E460: 01       nop  
+E461: 01       nop  
+E462: 01       nop  
+E463: 02       illegal
+E464: 01       nop  
+E465: F4 15 00 andb $1500
+E468: 00       illegal
+E469: 00       illegal
+E46A: 08       inx  
+E46B: 1B       aba  
+E46C: 72       illegal
+E46D: 28 03    bvc  $E472
+E46F: 00       illegal
+E470: 02       illegal
+E471: 07       tpa  
+E472: 9A D1    ora  $D1
+E474: 12       illegal
+E475: 00       illegal
+E476: 00       illegal
+E477: 00       illegal
+E478: 0C       clc  
+E479: 00       illegal
+E47A: 3F       swi  
+E47B: 1F       illegal
+E47C: 11       cba  
+E47D: 01       nop  
+E47E: 07       tpa  
+E47F: 04       illegal
+E480: 1C       illegal
+E481: 1F       illegal
+E482: F6 FE FE ldb  $FEFE
+E485: FE 01 21 ldx  $0121
+E488: FF 15 01 stx  $1501
+E48B: 0A       clv  
+E48C: 01       nop  
+E48D: 03       illegal
+E48E: BC FF 16 cmpx $FF16
+E491: 00       illegal
+E492: 00       illegal
+E493: 00       illegal
+E494: 08       inx  
+E495: 88 A0    eora #$A0
+E497: 98 90    eora $90
+E499: 88 80    eora #$80
+E49B: 78 70 68 asl  $7068
+E49E: 60 58    neg  (x+$58)
+E4A0: 50       negb 
+E4A1: 44       lsra 
+E4A2: 40       nega 
+E4A3: 01       nop  
+E4A4: 01       nop  
+E4A5: 02       illegal
+E4A6: 02       illegal
+E4A7: 04       illegal
+E4A8: 04       illegal
+E4A9: 08       inx  
+E4AA: 08       inx  
+E4AB: 10       sba  
+E4AC: 10       sba  
+E4AD: 30       tsx  
+E4AE: 60 C0    neg  (x+$C0)
+E4B0: E0 01    subb (x+$01)
+E4B2: 01       nop  
+E4B3: 02       illegal
+E4B4: 02       illegal
+E4B5: 03       illegal
+E4B6: 04       illegal
+E4B7: 05       illegal
+E4B8: 06       tap  
+E4B9: 07       tpa  
+E4BA: 08       inx  
+E4BB: 09       dex  
+E4BC: 0A       clv  
+E4BD: 0C       clc  
+E4BE: 80 7C    suba #$7C
+E4C0: 78 74 70 asl  $7470
+E4C3: 74 78 7C lsr  $787C
+E4C6: 80 01    suba #$01
+E4C8: 01       nop  
+E4C9: 02       illegal
+E4CA: 02       illegal
+E4CB: 04       illegal
+E4CC: 04       illegal
+E4CD: 08       inx  
+E4CE: 08       inx  
+E4CF: 10       sba  
+E4D0: 20 28    bra  $E4FA
+E4D2: 30       tsx  
+E4D3: 38       illegal
+E4D4: 40       nega 
+E4D5: 48       asla 
+E4D6: 50       negb 
+E4D7: 60 70    neg  (x+$70)
+E4D9: 80 A0    suba #$A0
+E4DB: B0 C0 08 suba $C008
+E4DE: 40       nega 
+E4DF: 08       inx  
+E4E0: 40       nega 
+E4E1: 08       inx  
+E4E2: 40       nega 
+E4E3: 08       inx  
+E4E4: 40       nega 
+E4E5: 08       inx  
+E4E6: 40       nega 
+E4E7: 08       inx  
+E4E8: 40       nega 
+E4E9: 08       inx  
+E4EA: 40       nega 
+E4EB: 08       inx  
+E4EC: 40       nega 
+E4ED: 08       inx  
+E4EE: 40       nega 
+E4EF: 08       inx  
+E4F0: 40       nega 
+E4F1: 01       nop  
+E4F2: 02       illegal
+E4F3: 04       illegal
+E4F4: 08       inx  
+E4F5: 09       dex  
+E4F6: 0A       clv  
+E4F7: 0B       sev  
+E4F8: 0C       clc  
+E4F9: 0E       cli  
+E4FA: 0F       sei  
+E4FB: 10       sba  
+E4FC: 12       illegal
+E4FD: 14       illegal
+E4FE: 16       tab  
+E4FF: 40       nega 
+E500: 10       sba  
+E501: 08       inx  
+E502: 01       nop  
+E503: 01       nop  
+E504: 01       nop  
+E505: 01       nop  
+E506: 01       nop  
+E507: 02       illegal
+E508: 02       illegal
+E509: 03       illegal
+E50A: 03       illegal
+E50B: 04       illegal
+E50C: 04       illegal
+E50D: 05       illegal
+E50E: 06       tap  
+E50F: 08       inx  
+E510: 0A       clv  
+E511: 0C       clc  
+E512: 10       sba  
+E513: 14       illegal
+E514: 18       illegal
+E515: 20 30    bra  $E547
+E517: 40       nega 
+E518: 50       negb 
+E519: 40       nega 
+E51A: 30       tsx  
+E51B: 20 10    bra  $E52D
+E51D: 0C       clc  
+E51E: 0A       clv  
+E51F: 08       inx  
+E520: 07       tpa  
+E521: 06       tap  
+E522: 05       illegal
+E523: 04       illegal
+E524: 03       illegal
+E525: 02       illegal
+E526: 02       illegal
+E527: 01       nop  
+E528: 01       nop  
+E529: 01       nop  
+E52A: 07       tpa  
+E52B: 08       inx  
+E52C: 09       dex  
+E52D: 0A       clv  
+E52E: 0C       clc  
+E52F: 08       inx  
+E530: 17       tba  
+E531: 18       illegal
+E532: 19       daa  
+E533: 1A       illegal
+E534: 1B       aba  
+E535: 1C       illegal
+E536: 00       illegal
+E537: 00       illegal
+E538: 00       illegal
+E539: 00       illegal
+E53A: 08       inx  
+E53B: 80 10    suba #$10
+E53D: 78 18 70 asl  $1870
+E540: 20 60    bra  $E5A2
+E542: 28 58    bvc  $E59C
+E544: 30       tsx  
+E545: 50       negb 
+E546: 40       nega 
+E547: 48       asla 
+E548: 00       illegal
+E549: 01       nop  
+E54A: 08       inx  
+E54B: 10       sba  
+E54C: 01       nop  
+E54D: 08       inx  
+E54E: 10       sba  
+E54F: 01       nop  
+E550: 08       inx  
+E551: 10       sba  
+E552: 01       nop  
+E553: 08       inx  
+E554: 10       sba  
+E555: 01       nop  
+E556: 08       inx  
+E557: 10       sba  
+E558: 01       nop  
+E559: 08       inx  
+E55A: 10       sba  
+E55B: 00       illegal
+E55C: 10       sba  
+E55D: 20 40    bra  $E59F
+E55F: 10       sba  
+E560: 20 40    bra  $E5A2
+E562: 10       sba  
+E563: 20 40    bra  $E5A5
+E565: 10       sba  
+E566: 20 40    bra  $E5A8
+E568: 10       sba  
+E569: 20 40    bra  $E5AB
+E56B: 10       sba  
+E56C: 20 40    bra  $E5AE
+E56E: 10       sba  
+E56F: 20 40    bra  $E5B1
+E571: 10       sba  
+E572: 20 40    bra  $E5B4
+E574: 00       illegal
+E575: 01       nop  
+E576: 40       nega 
+E577: 02       illegal
+E578: 42       illegal
+E579: 03       illegal
+E57A: 43       coma 
+E57B: 04       illegal
+E57C: 44       lsra 
+E57D: 05       illegal
+E57E: 45       illegal
+E57F: 06       tap  
+E580: 46       rora 
+E581: 07       tpa  
+E582: 47       asra 
+E583: 08       inx  
+E584: 48       asla 
+E585: 09       dex  
+E586: 49       rola 
+E587: 0A       clv  
+E588: 4A       deca 
+E589: 0B       sev  
+E58A: 4B       illegal
+E58B: 00       illegal
+E58C: 01       nop  
+E58D: 02       illegal
+E58E: 03       illegal
+E58F: 04       illegal
+E590: 05       illegal
+E591: 06       tap  
+E592: 07       tpa  
+E593: 08       inx  
+E594: 18       illegal
+E595: 19       daa  
+E596: 20 4D    bra  $E5E5
+E598: 59       rolb 
+E599: 53       comb 
+E59A: 54       lsrb 
+E59B: 49       rola 
+E59C: 43       coma 
+E59D: 20 4D    bra  $E5EC
+E59F: 41       illegal
+E5A0: 52       illegal
+E5A1: 41       illegal
+E5A2: 54       lsrb 
+E5A3: 48       asla 
+E5A4: 4F       clra 
+E5A5: 4E       illegal
+E5A6: 20 2D    bra  $E5D5
+E5A8: 20 43    bra  $E5ED
+E5AA: 4F       clra 
+E5AB: 50       negb 
+E5AC: 59       rolb 
+E5AD: 52       illegal
+E5AE: 49       rola 
+E5AF: 47       asra 
+E5B0: 48       asla 
+E5B1: 54       lsrb 
+E5B2: 20 28    bra  $E5DC
+E5B4: 43       coma 
+E5B5: 29 20    bvs  $E5D7
+E5B7: 31       ins  
+E5B8: 39       rts  
+E5B9: 38       illegal
+E5BA: 33       pulb 
+E5BB: 20 57    bra  $E614
+E5BD: 49       rola 
+E5BE: 4C       inca 
+E5BF: 4C       inca 
+E5C0: 49       rola 
+E5C1: 41       illegal
+E5C2: 4D       tsta 
+E5C3: 53       comb 
+E5C4: 20 45    bra  $E60B
+E5C6: 4C       inca 
+E5C7: 45       illegal
+E5C8: 43       coma 
+E5C9: 54       lsrb 
+E5CA: 52       illegal
+E5CB: 4F       clra 
+E5CC: 4E       illegal
+E5CD: 49       rola 
+E5CE: 43       coma 
+E5CF: 53       comb 
+E5D0: 20 49    bra  $E61B
+E5D2: 4E       illegal
+E5D3: 43       coma 
+E5D4: 2E 20    bgt  $E5F6
+E5D6: 41       illegal
+E5D7: 4C       inca 
+E5D8: 4C       inca 
+E5D9: 20 52    bra  $E62D
+E5DB: 49       rola 
+E5DC: 47       asra 
+E5DD: 48       asla 
+E5DE: 54       lsrb 
+E5DF: 53       comb 
+E5E0: 20 52    bra  $E634
+E5E2: 45       illegal
+E5E3: 53       comb 
+E5E4: 45       illegal
+E5E5: 52       illegal
+E5E6: 56       rorb 
+E5E7: 45       illegal
+E5E8: 44       lsra 
+E5E9: 20 20    bra  $E60B
+E5EB: 4D       tsta 
+E5EC: 59       rolb 
+E5ED: 53       comb 
+E5EE: 54       lsrb 
+E5EF: 49       rola 
+E5F0: 43       coma 
+E5F1: 20 4D    bra  $E640
+E5F3: 41       illegal
+E5F4: 52       illegal
+E5F5: 41       illegal
+E5F6: 54       lsrb 
+E5F7: 48       asla 
+E5F8: 4F       clra 
+E5F9: 4E       illegal
+E5FA: 20 2D    bra  $E629
+E5FC: 20 43    bra  $E641
+E5FE: 52       illegal
+E5FF: 45       illegal
+E600: 41       illegal
+E601: 54       lsrb 
+E602: 45       illegal
+E603: 44       lsra 
+E604: 20 42    bra  $E648
+E606: 59       rolb 
+E607: 3A       illegal
+E608: 20 4B    bra  $E655
+E60A: 52       illegal
+E60B: 49       rola 
+E60C: 53       comb 
+E60D: 54       lsrb 
+E60E: 49       rola 
+E60F: 4E       illegal
+E610: 41       illegal
+E611: 20 56    bra  $E669
+E613: 2E 20    bgt  $E635
+E615: 52       illegal
+E616: 55       illegal
+E617: 4B       illegal
+E618: 55       illegal
+E619: 49       rola 
+E61A: 5A       decb 
+E61B: 41       illegal
+E61C: 20 44    bra  $E662
+E61E: 4F       clra 
+E61F: 4E       illegal
+E620: 4F       clra 
+E621: 46       rora 
+E622: 52       illegal
+E623: 49       rola 
+E624: 4F       clra 
+E625: 20 FF    bra  $E626
+E627: FF FF FF 
+E62A: FF FF FF 
+E62D: FF FF FF 
+E630: FF FF FF 
+E633: FF FF FF 
+E636: FF FF FF 
+E639: FF FF FF 
+E63C: FF FF FF 
+E63F: FF FF FF 
+E642: FF FF FF 
+E645: FF FF FF 
+E648: FF FF FF 
+E64B: FF FF FF 
+E64E: FF FF FF 
+E651: FF FF FF 
+E654: FF FF FF 
+E657: FF FF FF 
+E65A: FF FF FF 
+E65D: FF FF FF 
+E660: FF FF FF 
+E663: FF FF FF 
+E666: FF FF FF 
+E669: FF FF FF 
+E66C: FF FF FF 
+E66F: FF FF FF 
+E672: FF FF FF 
+E675: FF FF FF 
+E678: FF FF FF 
+E67B: FF FF FF 
+E67E: FF FF FF 
+E681: FF FF FF 
+E684: FF FF FF 
+E687: FF FF FF 
+E68A: FF FF FF 
+E68D: FF FF FF 
+E690: FF FF FF 
+E693: FF FF FF 
+E696: FF FF FF 
+E699: FF FF FF 
+E69C: FF FF FF 
+E69F: FF FF FF 
+E6A2: FF FF FF 
+E6A5: FF FF FF 
+E6A8: FF FF FF 
+E6AB: FF FF FF 
+E6AE: FF FF FF 
+E6B1: FF FF FF 
+E6B4: FF FF FF 
+E6B7: FF FF FF 
+E6BA: FF FF FF 
+E6BD: FF FF FF 
+E6C0: FF FF FF 
+E6C3: FF FF FF 
+E6C6: FF FF FF 
+E6C9: FF FF FF 
+E6CC: FF FF FF 
+E6CF: FF FF FF 
+E6D2: FF FF FF 
+E6D5: FF FF FF 
+E6D8: FF FF FF 
+E6DB: FF FF FF 
+E6DE: FF FF FF 
+E6E1: FF FF FF 
+E6E4: FF FF FF 
+E6E7: FF FF FF 
+E6EA: FF FF FF 
+E6ED: FF FF FF 
+E6F0: FF FF FF 
+E6F3: FF FF FF 
+E6F6: FF FF FF 
+E6F9: FF FF FF 
+E6FC: FF FF FF 
+E6FF: FF FF FF 
+E702: FF FF FF 
+E705: FF FF FF 
+E708: FF FF FF 
+E70B: FF FF FF 
+E70E: FF FF FF 
+E711: FF FF FF 
+E714: FF FF FF 
+E717: FF FF FF 
+E71A: FF FF FF 
+E71D: FF FF FF 
+E720: FF FF FF 
+E723: FF FF FF 
+E726: FF FF FF 
+E729: FF FF FF 
+E72C: FF FF FF 
+E72F: FF FF FF 
+E732: FF FF FF 
+E735: FF FF FF 
+E738: FF FF FF 
+E73B: FF FF FF 
+E73E: FF FF FF 
+E741: FF FF FF 
+E744: FF FF FF 
+E747: FF FF FF 
+E74A: FF FF FF 
+E74D: FF FF FF 
+E750: FF FF FF 
+E753: FF FF FF 
+E756: FF FF FF 
+E759: FF FF FF 
+E75C: FF FF FF 
+E75F: FF FF FF 
+E762: FF FF FF 
+E765: FF FF FF 
+E768: FF FF FF 
+E76B: FF FF FF 
+E76E: FF FF FF 
+E771: FF FF FF 
+E774: FF FF FF 
+E777: FF FF FF 
+E77A: FF FF FF 
+E77D: FF FF FF 
+E780: FF FF FF 
+E783: FF FF FF 
+E786: FF FF FF 
+E789: FF FF FF 
+E78C: FF FF FF 
+E78F: FF FF FF 
+E792: FF FF FF 
+E795: FF FF FF 
+E798: FF FF FF 
+E79B: FF FF FF 
+E79E: FF FF FF 
+E7A1: FF FF FF 
+E7A4: FF FF FF 
+E7A7: FF FF FF 
+E7AA: FF FF FF 
+E7AD: FF FF FF 
+E7B0: FF FF FF 
+E7B3: FF FF FF 
+E7B6: FF FF FF 
+E7B9: FF FF FF 
+E7BC: FF FF FF 
+E7BF: FF FF FF 
+E7C2: FF FF FF 
+E7C5: FF FF FF 
+E7C8: FF FF FF 
+E7CB: FF FF FF 
+E7CE: FF FF FF 
+E7D1: FF FF FF 
+E7D4: FF FF FF 
+E7D7: FF FF FF 
+E7DA: FF FF FF 
+E7DD: FF FF FF 
+E7E0: FF FF FF 
+E7E3: FF FF FF 
+E7E6: FF FF FF 
+E7E9: FF FF FF 
+E7EC: FF FF FF 
+E7EF: FF FF FF 
+E7F2: FF FF FF 
+E7F5: FF FF FF 
+E7F8: FF FF FF 
+E7FB: FF FF FF 
+E7FE: FF FF FF 
+E801: FF FF FF 
+E804: FF FF FF 
+E807: FF FF FF 
+E80A: FF FF FF 
+E80D: FF FF FF 
+E810: FF FF FF 
+E813: FF FF FF 
+E816: FF FF FF 
+E819: FF FF FF 
+E81C: FF FF FF 
+E81F: FF FF FF 
+E822: FF FF FF 
+E825: FF FF FF 
+E828: FF FF FF 
+E82B: FF FF FF 
+E82E: FF FF FF 
+E831: FF FF FF 
+E834: FF FF FF 
+E837: FF FF FF 
+E83A: FF FF FF 
+E83D: FF FF FF 
+E840: FF FF FF 
+E843: FF FF FF 
+E846: FF FF FF 
+E849: FF FF FF 
+E84C: FF FF FF 
+E84F: FF FF FF 
+E852: FF FF FF 
+E855: FF FF FF 
+E858: FF FF FF 
+E85B: FF FF FF 
+E85E: FF FF FF 
+E861: FF FF FF 
+E864: FF FF FF 
+E867: FF FF FF 
+E86A: FF FF FF 
+E86D: FF FF FF 
+E870: FF FF FF 
+E873: FF FF FF 
+E876: FF FF FF 
+E879: FF FF FF 
+E87C: FF FF FF 
+E87F: FF FF FF 
+E882: FF FF FF 
+E885: FF FF FF 
+E888: FF FF FF 
+E88B: FF FF FF 
+E88E: FF FF FF 
+E891: FF FF FF 
+E894: FF FF FF 
+E897: FF FF FF 
+E89A: FF FF FF 
+E89D: FF FF FF 
+E8A0: FF FF FF 
+E8A3: FF FF FF 
+E8A6: FF FF FF 
+E8A9: FF FF FF 
+E8AC: FF FF FF 
+E8AF: FF FF FF 
+E8B2: FF FF FF 
+E8B5: FF FF FF 
+E8B8: FF FF FF 
+E8BB: FF FF FF 
+E8BE: FF FF FF 
+E8C1: FF FF FF 
+E8C4: FF FF FF 
+E8C7: FF FF FF 
+E8CA: FF FF FF 
+E8CD: FF FF FF 
+E8D0: FF FF FF 
+E8D3: FF FF FF 
+E8D6: FF FF FF 
+E8D9: FF FF FF 
+E8DC: FF FF FF 
+E8DF: FF FF FF 
+E8E2: FF FF FF 
+E8E5: FF FF FF 
+E8E8: FF FF FF 
+E8EB: FF FF FF 
+E8EE: FF FF FF 
+E8F1: FF FF FF 
+E8F4: FF FF FF 
+E8F7: FF FF FF 
+E8FA: FF FF FF 
+E8FD: FF FF FF 
+E900: FF FF FF 
+E903: FF FF FF 
+E906: FF FF FF 
+E909: FF FF FF 
+E90C: FF FF FF 
+E90F: FF FF FF 
+E912: FF FF FF 
+E915: FF FF FF 
+E918: FF FF FF 
+E91B: FF FF FF 
+E91E: FF FF FF 
+E921: FF FF FF 
+E924: FF FF FF 
+E927: FF FF FF 
+E92A: FF FF FF 
+E92D: FF FF FF 
+E930: FF FF FF 
+E933: FF FF FF 
+E936: FF FF FF 
+E939: FF FF FF 
+E93C: FF FF FF 
+E93F: FF FF FF 
+E942: FF FF FF 
+E945: FF FF FF 
+E948: FF FF FF 
+E94B: FF FF FF 
+E94E: FF FF FF 
+E951: FF FF FF 
+E954: FF FF FF 
+E957: FF FF FF 
+E95A: FF FF FF 
+E95D: FF FF FF 
+E960: FF FF FF 
+E963: FF FF FF 
+E966: FF FF FF 
+E969: FF FF FF 
+E96C: FF FF FF 
+E96F: FF FF FF 
+E972: FF FF FF 
+E975: FF FF FF 
+E978: FF FF FF 
+E97B: FF FF FF 
+E97E: FF FF FF 
+E981: FF FF FF 
+E984: FF FF FF 
+E987: FF FF FF 
+E98A: FF FF FF 
+E98D: FF FF FF 
+E990: FF FF FF 
+E993: FF FF FF 
+E996: FF FF FF 
+E999: FF FF FF 
+E99C: FF FF FF 
+E99F: FF FF FF 
+E9A2: FF FF FF 
+E9A5: FF FF FF 
+E9A8: FF FF FF 
+E9AB: FF FF FF 
+E9AE: FF FF FF 
+E9B1: FF FF FF 
+E9B4: FF FF FF 
+E9B7: FF FF FF 
+E9BA: FF FF FF 
+E9BD: FF FF FF 
+E9C0: FF FF FF 
+E9C3: FF FF FF 
+E9C6: FF FF FF 
+E9C9: FF FF FF 
+E9CC: FF FF FF 
+E9CF: FF FF FF 
+E9D2: FF FF FF 
+E9D5: FF FF FF 
+E9D8: FF FF FF 
+E9DB: FF FF FF 
+E9DE: FF FF FF 
+E9E1: FF FF FF 
+E9E4: FF FF FF 
+E9E7: FF FF FF 
+E9EA: FF FF FF 
+E9ED: FF FF FF 
+E9F0: FF FF FF 
+E9F3: FF FF FF 
+E9F6: FF FF FF 
+E9F9: FF FF FF 
+E9FC: FF FF FF 
+E9FF: FF FF FF 
+EA02: FF FF FF 
+EA05: FF FF FF 
+EA08: FF FF FF 
+EA0B: FF FF FF 
+EA0E: FF FF FF 
+EA11: FF FF FF 
+EA14: FF FF FF 
+EA17: FF FF FF 
+EA1A: FF FF FF 
+EA1D: FF FF FF 
+EA20: FF FF FF 
+EA23: FF FF FF 
+EA26: FF FF FF 
+EA29: FF FF FF 
+EA2C: FF FF FF 
+EA2F: FF FF FF 
+EA32: FF FF FF 
+EA35: FF FF FF 
+EA38: FF FF FF 
+EA3B: FF FF FF 
+EA3E: FF FF FF 
+EA41: FF FF FF 
+EA44: FF FF FF 
+EA47: FF FF FF 
+EA4A: FF FF FF 
+EA4D: FF FF FF 
+EA50: FF FF FF 
+EA53: FF FF FF 
+EA56: FF FF FF 
+EA59: FF FF FF 
+EA5C: FF FF FF 
+EA5F: FF FF FF 
+EA62: FF FF FF 
+EA65: FF FF FF 
+EA68: FF FF FF 
+EA6B: FF FF FF 
+EA6E: FF FF FF 
+EA71: FF FF FF 
+EA74: FF FF FF 
+EA77: FF FF FF 
+EA7A: FF FF FF 
+EA7D: FF FF FF 
+EA80: FF FF FF 
+EA83: FF FF FF 
+EA86: FF FF FF 
+EA89: FF FF FF 
+EA8C: FF FF FF 
+EA8F: FF FF FF 
+EA92: FF FF FF 
+EA95: FF FF FF 
+EA98: FF FF FF 
+EA9B: FF FF FF 
+EA9E: FF FF FF 
+EAA1: FF FF FF 
+EAA4: FF FF FF 
+EAA7: FF FF FF 
+EAAA: FF FF FF 
+EAAD: FF FF FF 
+EAB0: FF FF FF 
+EAB3: FF FF FF 
+EAB6: FF FF FF 
+EAB9: FF FF FF 
+EABC: FF FF FF 
+EABF: FF FF FF 
+EAC2: FF FF FF 
+EAC5: FF FF FF 
+EAC8: FF FF FF 
+EACB: FF FF FF 
+EACE: FF FF FF 
+EAD1: FF FF FF 
+EAD4: FF FF FF 
+EAD7: FF FF FF 
+EADA: FF FF FF 
+EADD: FF FF FF 
+EAE0: FF FF FF 
+EAE3: FF FF FF 
+EAE6: FF FF FF 
+EAE9: FF FF FF 
+EAEC: FF FF FF 
+EAEF: FF FF FF 
+EAF2: FF FF FF 
+EAF5: FF FF FF 
+EAF8: FF FF FF 
+EAFB: FF FF FF 
+EAFE: FF FF FF 
+EB01: FF FF FF 
+EB04: FF FF FF 
+EB07: FF FF FF 
+EB0A: FF FF FF 
+EB0D: FF FF FF 
+EB10: FF FF FF 
+EB13: FF FF FF 
+EB16: FF FF FF 
+EB19: FF FF FF 
+EB1C: FF FF FF 
+EB1F: FF FF FF 
+EB22: FF FF FF 
+EB25: FF FF FF 
+EB28: FF FF FF 
+EB2B: FF FF FF 
+EB2E: FF FF FF 
+EB31: FF FF FF 
+EB34: FF FF FF 
+EB37: FF FF FF 
+EB3A: FF FF FF 
+EB3D: FF FF FF 
+EB40: FF FF FF 
+EB43: FF FF FF 
+EB46: FF FF FF 
+EB49: FF FF FF 
+EB4C: FF FF FF 
+EB4F: FF FF FF 
+EB52: FF FF FF 
+EB55: FF FF FF 
+EB58: FF FF FF 
+EB5B: FF FF FF 
+EB5E: FF FF FF 
+EB61: FF FF FF 
+EB64: FF FF FF 
+EB67: FF FF FF 
+EB6A: FF FF FF 
+EB6D: FF FF FF 
+EB70: FF FF FF 
+EB73: FF FF FF 
+EB76: FF FF FF 
+EB79: FF FF FF 
+EB7C: FF FF FF 
+EB7F: FF FF FF 
+EB82: FF FF FF 
+EB85: FF FF FF 
+EB88: FF FF FF 
+EB8B: FF FF FF 
+EB8E: FF FF FF 
+EB91: FF FF FF 
+EB94: FF FF FF 
+EB97: FF FF FF 
+EB9A: FF FF FF 
+EB9D: FF FF FF 
+EBA0: FF FF FF 
+EBA3: FF FF FF 
+EBA6: FF FF FF 
+EBA9: FF FF FF 
+EBAC: FF FF FF 
+EBAF: FF FF FF 
+EBB2: FF FF FF 
+EBB5: FF FF FF 
+EBB8: FF FF FF 
+EBBB: FF FF FF 
+EBBE: FF FF FF 
+EBC1: FF FF FF 
+EBC4: FF FF FF 
+EBC7: FF FF FF 
+EBCA: FF FF FF 
+EBCD: FF FF FF 
+EBD0: FF FF FF 
+EBD3: FF FF FF 
+EBD6: FF FF FF 
+EBD9: FF FF FF 
+EBDC: FF FF FF 
+EBDF: FF FF FF 
+EBE2: FF FF FF 
+EBE5: FF FF FF 
+EBE8: FF FF FF 
+EBEB: FF FF FF 
+EBEE: FF FF FF 
+EBF1: FF FF FF 
+EBF4: FF FF FF 
+EBF7: FF FF FF 
+EBFA: FF FF FF 
+EBFD: FF FF FF 
+EC00: FF FF FF 
+EC03: FF FF FF 
+EC06: FF FF FF 
+EC09: FF FF FF 
+EC0C: FF FF FF 
+EC0F: FF FF FF 
+EC12: FF FF FF 
+EC15: FF FF FF 
+EC18: FF FF FF 
+EC1B: FF FF FF 
+EC1E: FF FF FF 
+EC21: FF FF FF 
+EC24: FF FF FF 
+EC27: FF FF FF 
+EC2A: FF FF FF 
+EC2D: FF FF FF 
+EC30: FF FF FF 
+EC33: FF FF FF 
+EC36: FF FF FF 
+EC39: FF FF FF 
+EC3C: FF FF FF 
+EC3F: FF FF FF 
+EC42: FF FF FF 
+EC45: FF FF FF 
+EC48: FF FF FF 
+EC4B: FF FF FF 
+EC4E: FF FF FF 
+EC51: FF FF FF 
+EC54: FF FF FF 
+EC57: FF FF FF 
+EC5A: FF FF FF 
+EC5D: FF FF FF 
+EC60: FF FF FF 
+EC63: FF FF FF 
+EC66: FF FF FF 
+EC69: FF FF FF 
+EC6C: FF FF FF 
+EC6F: FF FF FF 
+EC72: FF FF FF 
+EC75: FF FF FF 
+EC78: FF FF FF 
+EC7B: FF FF FF 
+EC7E: FF FF FF 
+EC81: FF FF FF 
+EC84: FF FF FF 
+EC87: FF FF FF 
+EC8A: FF FF FF 
+EC8D: FF FF FF 
+EC90: FF FF FF 
+EC93: FF FF FF 
+EC96: FF FF FF 
+EC99: FF FF FF 
+EC9C: FF FF FF 
+EC9F: FF FF FF 
+ECA2: FF FF FF 
+ECA5: FF FF FF 
+ECA8: FF FF FF 
+ECAB: FF FF FF 
+ECAE: FF FF FF 
+ECB1: FF FF FF 
+ECB4: FF FF FF 
+ECB7: FF FF FF 
+ECBA: FF FF FF 
+ECBD: FF FF FF 
+ECC0: FF FF FF 
+ECC3: FF FF FF 
+ECC6: FF FF FF 
+ECC9: FF FF FF 
+ECCC: FF FF FF 
+ECCF: FF FF FF 
+ECD2: FF FF FF 
+ECD5: FF FF FF 
+ECD8: FF FF FF 
+ECDB: FF FF FF 
+ECDE: FF FF FF 
+ECE1: FF FF FF 
+ECE4: FF FF FF 
+ECE7: FF FF FF 
+ECEA: FF FF FF 
+ECED: FF FF FF 
+ECF0: FF FF FF 
+ECF3: FF FF FF 
+ECF6: FF FF FF 
+ECF9: FF FF FF 
+ECFC: FF FF FF 
+ECFF: FF FF FF 
+ED02: FF FF FF 
+ED05: FF FF FF 
+ED08: FF FF FF 
+ED0B: FF FF FF 
+ED0E: FF FF FF 
+ED11: FF FF FF 
+ED14: FF FF FF 
+ED17: FF FF FF 
+ED1A: FF FF FF 
+ED1D: FF FF FF 
+ED20: FF FF FF 
+ED23: FF FF FF 
+ED26: FF FF FF 
+ED29: FF FF FF 
+ED2C: FF FF FF 
+ED2F: FF FF FF 
+ED32: FF FF FF 
+ED35: FF FF FF 
+ED38: FF FF FF 
+ED3B: FF FF FF 
+ED3E: FF FF FF 
+ED41: FF FF FF 
+ED44: FF FF FF 
+ED47: FF FF FF 
+ED4A: FF FF FF 
+ED4D: FF FF FF 
+ED50: FF FF FF 
+ED53: FF FF FF 
+ED56: FF FF FF 
+ED59: FF FF FF 
+ED5C: FF FF FF 
+ED5F: FF FF FF 
+ED62: FF FF FF 
+ED65: FF FF FF 
+ED68: FF FF FF 
+ED6B: FF FF FF 
+ED6E: FF FF FF 
+ED71: FF FF FF 
+ED74: FF FF FF 
+ED77: FF FF FF 
+ED7A: FF FF FF 
+ED7D: FF FF FF 
+ED80: FF FF FF 
+ED83: FF FF FF 
+ED86: FF FF FF 
+ED89: FF FF FF 
+ED8C: FF FF FF 
+ED8F: FF FF FF 
+ED92: FF FF FF 
+ED95: FF FF FF 
+ED98: FF FF FF 
+ED9B: FF FF FF 
+ED9E: FF FF FF 
+EDA1: FF FF FF 
+EDA4: FF FF FF 
+EDA7: FF FF FF 
+EDAA: FF FF FF 
+EDAD: FF FF FF 
+EDB0: FF FF FF 
+EDB3: FF FF FF 
+EDB6: FF FF FF 
+EDB9: FF FF FF 
+EDBC: FF FF FF 
+EDBF: FF FF FF 
+EDC2: FF FF FF 
+EDC5: FF FF FF 
+EDC8: FF FF FF 
+EDCB: FF FF FF 
+EDCE: FF FF FF 
+EDD1: FF FF FF 
+EDD4: FF FF FF 
+EDD7: FF FF FF 
+EDDA: FF FF FF 
+EDDD: FF FF FF 
+EDE0: FF FF FF 
+EDE3: FF FF FF 
+EDE6: FF FF FF 
+EDE9: FF FF FF 
+EDEC: FF FF FF 
+EDEF: FF FF FF 
+EDF2: FF FF FF 
+EDF5: FF FF FF 
+EDF8: FF FF FF 
+EDFB: FF FF FF 
+EDFE: FF FF FF 
+EE01: FF FF FF 
+EE04: FF FF FF 
+EE07: FF FF FF 
+EE0A: FF FF FF 
+EE0D: FF FF FF 
+EE10: FF FF FF 
+EE13: FF FF FF 
+EE16: FF FF FF 
+EE19: FF FF FF 
+EE1C: FF FF FF 
+EE1F: FF FF FF 
+EE22: FF FF FF 
+EE25: FF FF FF 
+EE28: FF FF FF 
+EE2B: FF FF FF 
+EE2E: FF FF FF 
+EE31: FF FF FF 
+EE34: FF FF FF 
+EE37: FF FF FF 
+EE3A: FF FF FF 
+EE3D: FF FF FF 
+EE40: FF FF FF 
+EE43: FF FF FF 
+EE46: FF FF FF 
+EE49: FF FF FF 
+EE4C: FF FF FF 
+EE4F: FF FF FF 
+EE52: FF FF FF 
+EE55: FF FF FF 
+EE58: FF FF FF 
+EE5B: FF FF FF 
+EE5E: FF FF FF 
+EE61: FF FF FF 
+EE64: FF FF FF 
+EE67: FF FF FF 
+EE6A: FF FF FF 
+EE6D: FF FF FF 
+EE70: FF FF FF 
+EE73: FF FF FF 
+EE76: FF FF FF 
+EE79: FF FF FF 
+EE7C: FF FF FF 
+EE7F: FF FF FF 
+EE82: FF FF FF 
+EE85: FF FF FF 
+EE88: FF FF FF 
+EE8B: FF FF FF 
+EE8E: FF FF FF 
+EE91: FF FF FF 
+EE94: FF FF FF 
+EE97: FF FF FF 
+EE9A: FF FF FF 
+EE9D: FF FF FF 
+EEA0: FF FF FF 
+EEA3: FF FF FF 
+EEA6: FF FF FF 
+EEA9: FF FF FF 
+EEAC: FF FF FF 
+EEAF: FF FF FF 
+EEB2: FF FF FF 
+EEB5: FF FF FF 
+EEB8: FF FF FF 
+EEBB: FF FF FF 
+EEBE: FF FF FF 
+EEC1: FF FF FF 
+EEC4: FF FF FF 
+EEC7: FF FF FF 
+EECA: FF FF FF 
+EECD: FF FF FF 
+EED0: FF FF FF 
+EED3: FF FF FF 
+EED6: FF FF FF 
+EED9: FF FF FF 
+EEDC: FF FF FF 
+EEDF: FF FF FF 
+EEE2: FF FF FF 
+EEE5: FF FF FF 
+EEE8: FF FF FF 
+EEEB: FF FF FF 
+EEEE: FF FF FF 
+EEF1: FF FF FF 
+EEF4: FF FF FF 
+EEF7: FF FF FF 
+EEFA: FF FF FF 
+EEFD: FF FF FF 
+EF00: CE FF FF ldx  #$FFFF
+EF03: 5F       clrb 
+EF04: E9 00    adcb (x+$00)
+EF06: 09       dex  
+EF07: 8C E0 00 cmpx #$E000
+EF0A: 26 F8    bne  $EF04
+EF0C: F7 F0 00 stb  $F000
+EF0F: 3E       wai  
+EF10: FF FF FF 
+EF13: FF FF FF 
+EF16: FF FF FF 
+EF19: FF FF FF 
+EF1C: FF FF FF 
+EF1F: FF FF FF 
+EF22: FF FF FF 
+EF25: FF FF FF 
+EF28: FF FF FF 
+EF2B: FF FF FF 
+EF2E: FF FF FF 
+EF31: FF FF FF 
+EF34: FF FF FF 
+EF37: FF FF FF 
+EF3A: FF FF FF 
+EF3D: FF FF FF 
+EF40: FF FF FF 
+EF43: FF FF FF 
+EF46: FF FF FF 
+EF49: FF FF FF 
+EF4C: FF FF FF 
+EF4F: FF FF FF 
+EF52: FF FF FF 
+EF55: FF FF FF 
+EF58: FF FF FF 
+EF5B: FF FF FF 
+EF5E: FF FF FF 
+EF61: FF FF FF 
+EF64: FF FF FF 
+EF67: FF FF FF 
+EF6A: FF FF FF 
+EF6D: FF FF FF 
+EF70: FF FF FF 
+EF73: FF FF FF 
+EF76: FF FF FF 
+EF79: FF FF FF 
+EF7C: FF FF FF 
+EF7F: FF FF FF 
+EF82: FF FF FF 
+EF85: FF FF FF 
+EF88: FF FF FF 
+EF8B: FF FF FF 
+EF8E: FF FF FF 
+EF91: FF FF FF 
+EF94: FF FF FF 
+EF97: FF FF FF 
+EF9A: FF FF FF 
+EF9D: FF FF FF 
+EFA0: FF FF FF 
+EFA3: FF FF FF 
+EFA6: FF FF FF 
+EFA9: FF FF FF 
+EFAC: FF FF FF 
+EFAF: FF FF FF 
+EFB2: FF FF FF 
+EFB5: FF FF FF 
+EFB8: FF FF FF 
+EFBB: FF FF FF 
+EFBE: FF FF FF 
+EFC1: FF FF FF 
+EFC4: FF FF FF 
+EFC7: FF FF FF 
+EFCA: FF FF FF 
+EFCD: FF FF FF 
+EFD0: FF FF FF 
+EFD3: FF FF FF 
+EFD6: FF FF FF 
+EFD9: FF FF FF 
+EFDC: FF FF FF 
+EFDF: FF FF FF 
+EFE2: FF FF FF 
+EFE5: FF FF FF 
+EFE8: FF FF FF 
+EFEB: FF FF FF 
+EFEE: FF FF FF 
+EFF1: FF FF FF 
+EFF4: FF FF FF 
+EFF7: FF FF FF 
+EFFA: FF FF FF 
+EFFD: FF FF FF 
+;;
+;;
+;;   Sound ROM SETUP
 ;;
 ;;
 F000: FF				;CHECKSUM BYTE
@@ -93,56 +1992,72 @@ F057: 81 01    cmpa #$01
 F059: 25 2B    bcs  $F086
 F05B: 22 03    bhi  $F060
 F05D: 7E F1 5D jmp  $F15D
-;;GWAVE PLAYSFX
+;; GWAVE PLAYSFX
 F060: 81 19    cmpa #$19
 F062: 22 08    bhi  $F06C
 F064: 80 02    suba #$02
 F066: BD F1 7B jsr  $F17B
 F069: 7E F1 E1 jmp  $F1E1
-;;
+;; MORE GWAVE PLAYSFX?
 F06C: 81 2F    cmpa #$2F
 F06E: 22 05    bhi  $F075
 F070: 80 1A    suba #$1A
 F072: 7E E3 91 jmp  $E391
+;;
+;; MUTILPLE SYNTH SELECT  (WALSH / ORGAN TUNE ARE TRIGGERED HERE)
+;;
+;;   This uses a jump table at F087 to jump to a specific routine.
+;;   If the sound ID is $30 through $52, it is subtracted by #$30
+;;   and then the number is used to find the table offset.
+;;
 F075: 81 52    cmpa #$52
-F077: 22 0D    bhi  $F086
+F077: 22 0D    bhi  $F086		;;(bigger number? nope, no sound)
 F079: 80 30    suba #$30
-F07B: CE F0 87 ldx  #$F087
+F07B: CE F0 87 ldx  #$F087		;;(grab jump address from table)
 F07E: 48       asla 
 F07F: BD E1 6D jsr  $E16D
-F082: EE 00    ldx  (x+$00)
-F084: 6E 00    jmp  (x+$00)
-F086: 39       rts  
-F087: F5 92 F5 bitb $92F5
-F08A: 9D F6    jsr  $F6
-F08C: 37       pshb 
-F08D: F6 F9 F5 ldb  $F9F5
-F090: B0 F5 B4 suba $F5B4
-F093: F5 B8 F7 bitb $B8F7
-F096: 01       nop  
-F097: F7 09 F7 stb  $09F7
-F09A: 88 E3    eora #$E3
-F09C: 2C F8    bge  $F096
-F09E: 05       illegal
-F09F: F8 17 E2 eorb $17E2
-F0A2: F7 F8 E9 stb  $F8E9
-F0A5: E1 7C    cmpb (x+$7C)
-F0A7: F8 AA F8 eorb $AAF8
-F0AA: AE F8    lds  (x+$F8)
-F0AC: B2 F8 B6 sbca $F8B6
-F0AF: FF 4E FF stx  $4EFF
-F0B2: 52       illegal
-F0B3: FF 56 FF stx  $56FF
-F0B6: 77 FF 9A asr  $FF9A
-F0B9: FF BB E1 stx  $BBE1
-F0BC: 94 E1    anda $E1
-F0BE: B8 E1 E2 eora $E1E2
-F0C1: E1 F1    cmpb (x+$F1)
-F0C3: E2 0A    sbcb (x+$0A)
-F0C5: E2 43    sbcb (x+$43)
-F0C7: E2 62    sbcb (x+$62)
-F0C9: E2 B3    sbcb (x+$B3)
-F0CB: E0 CD    subb (x+$CD)
+F082: EE 00    ldx  (x+$00)		;;(grab address from table)
+F084: 6E 00    jmp  (x+$00)		;;(go to synth routine)
+;;
+F086: 39       rts  			;;(bigger ID numbers get muted here)
+;;
+;;  SOUND JUMP TABLE
+;;
+F087: F5 92 				;;($30)
+F089: F5 9D 				;;($31)
+F08B: F6 37 				;;($32)
+F08D: F6 F9 				;;($33)
+F08F: F5 B0 				;;($34) 
+F091: F5 B4 				;;($35)
+F093: F5 B8 				;;($36)
+F095: F7 01 				;;($37)
+F097: F7 09 				;;($38)
+F099: F7 88 				;;($39)
+F09B: E3 2C 				;;($3A)
+F09D: F8 05 				;;($3B)
+F09F: F8 17 				;;($3C) 
+F0A1: E2 F7 				;;($3D)
+F0A3: F8 E9 				;;($3E)
+F0A5: E1 7C 				;;($3F)
+F0A7: F8 AA 				;;($40)
+F0A9: F8 AE				;;($41)
+F0AB: F8 B2				;;($42)
+F0AD: F8 B6				;;($43)
+F0AF: FF 4E				;;($44)
+F0B1: FF 52				;;($45)
+F0B3: FF 56				;;($46)
+F0B5: FF 77				;;($47 = HIT BY APPLE)
+F0B7: FF 9A				;;($48)	
+F0B9: FF BB				;;($49)
+F0BB: E1 94				;;($4A)
+F0BD: E1 B8				;;($4B)
+F0BF: E1 E2				;;($4C)
+F0C1: E1 F1				;;($4D)
+F0C3: E2 0A				;;($4E)
+F0C5: E2 43				;;($4F)
+F0C7: E2 62				;;($50)
+F0C9: E2 B3				;;($51)
+F0CB: E0 CD				;;($52 = HIDDEN ORGAN TUNE)
 F0CD: 20 4D    bra  $F11C
 F0CF: 59       rolb 
 F0D0: 53       comb 
@@ -511,11 +2426,11 @@ F2F2: 12       illegal
 F2F3: 39       rts  
 ;;GSQ22
 F2F4: 10       sba  
-F2F5: FF FF FF stx  $FFFF
+F2F5: FF FF FF 
 F2F8: FF 00 00 stx  $0000
 F2FB: 00       illegal
 F2FC: 00       illegal
-F2FD: FF FF FF stx  $FFFF
+F2FD: FF FF FF 
 F300: FF 00 00 stx  $0000
 F303: 00       illegal
 F304: 00       illegal
@@ -586,7 +2501,7 @@ F35D: 19       daa
 F35E: 37       pshb 
 ;;
 F35F: 08       inx  
-F360: FF FF FF stx  $FFFF
+F360: FF FF FF 
 F363: FF 00 00 stx  $0000
 F366: 00       illegal
 F367: 00       illegal
@@ -1111,13 +3026,13 @@ F70F: C6 1C    ldb  #$1C
 F711: BD F2 AC jsr  $F2AC
 F714: 7E F6 50 jmp  $F650
 F717: 39       rts  
-F718: FF FF FF stx  $FFFF
+F718: FF FF FF 
 F71B: 90 FF    suba $FF
-F71D: FF FF FF stx  $FFFF
-F720: FF FF FF stx  $FFFF
+F71D: FF FF FF 
+F720: FF FF FF 
 F723: 90 FF    suba $FF
-F725: FF FF FF stx  $FFFF
-F728: FF FF FF stx  $FFFF
+F725: FF FF FF 
+F728: FF FF FF 
 F72B: FF 00 00 stx  $0000
 F72E: 00       illegal
 F72F: 00       illegal
@@ -2261,8 +4176,8 @@ FF3B: 70 FB 80 neg  $FB80
 ;;WALSHT
 FF3E: FE 80 FE B5 
 FF42: FE CD FE DD  
-FF46: FE E4 FF 13       illegal
-FF4A: FF 22 FF 32       pula 
+FF46: FE E4 FF 13       		;;Hit by Apple SFX
+FF4A: FF 22 FF 32      
 FF4E: 86 00    lda  #$00
 FF50: 20 6D    bra  $FFBF
 FF52: 86 01    lda  #$01
@@ -2287,6 +4202,7 @@ FF6F: 81 1C    cmpa #$1C
 FF71: 26 E9    bne  $FF5C
 FF73: 7F 00 86 clr  $0086
 FF76: 39       rts  
+;;
 FF77: 86 01    lda  #$01
 FF79: C6 20    ldb  #$20
 FF7B: D7 86    stb  $86
@@ -2360,7 +4276,7 @@ FFEF: FF FF FF
 FFF2: FF FF FF
 FFF5: FF FF FF
 ;;VECTORS
-FFF8: F02E						;;IRQ
-FFFA: F001						;;SETUP
-FFFC: F039						;;NMI
-FFFE: F001						;;SETUP
+FFF8: F02E				;;IRQ
+FFFA: F001				;;SETUP
+FFFC: F039				;;NMI
+FFFE: F001				;;SETUP
