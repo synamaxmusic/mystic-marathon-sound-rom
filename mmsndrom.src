@@ -2014,7 +2014,7 @@ F072: 7E E3 91 jmp  $E391
 ;;
 ;; MUTILPLE SYNTH SELECT  (WALSH / ORGAN TUNE ARE TRIGGERED HERE)
 ;;
-;;   This uses a jump table at F087 to jump to a specific routine.
+;;   This uses a jump table at $F087 to jump to a specific routine.
 ;;   If the sound ID is $30 through $52, it is subtracted by #$30
 ;;   and then the number is used to find the table offset.
 ;;
@@ -2208,6 +2208,9 @@ F177: 0E       cli
 F178: 05       illegal
 F179: 09       dex  
 F17A: 00       illegal
+*
+*
+*GWAVE LOADER
 ;;GWLD
 F17B: 16       tab  
 F17C: 58       aslb 
