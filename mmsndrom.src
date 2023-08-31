@@ -3276,12 +3276,15 @@ F8D3: F0 10 01 subb $1001
 F8D6: 01       nop  
 F8D7: CE D9 39 ldx  #$D939
 F8DA: DF 80    stx  $80
+*
+*VARI LOADER ;;(I think??)
+*
 F8DC: 16       tab  
 F8DD: 48       asla 
 F8DE: 48       asla 
 F8DF: 1B       aba  
 F8E0: CE F8 BE ldx  #$F8BE
-F8E3: BD E1 6D jsr  $E16D
+F8E3: BD E1 6D jsr  $E16D		;;ADDX
 F8E6: 7E F9 50 jmp  $F950
 *
 *
