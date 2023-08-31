@@ -51,6 +51,45 @@
 ;;     TREE ENEMY CONCEPT IDEAS: PYTHON ANGHELO
 ;;
 ;;---------------------------------------------------------------------
+*
+*
+* SCREAM EQUATES
+*
+ECHOS	EQU	4
+FREQ	EQU	0		
+TIMER	EQU	1
+*
+*GLOBALS
+*
+	ORG	0
+BG1FLG	RMB	1	BACKGROUND SOUND 1
+BG2FLG	RMB	1	BACKGROUND SOUND 2
+SP1FLG	RMB	1	SPINNER FLAG
+B2FLG	RMB	1	BONUS #2 FLAG
+ORGFLG	RMB	1	ORGAN FLAG
+HI	RMB	1	RANDOM SEED
+LO	RMB	1	RANDOM SEED
+XDECAY	RMB	2
+AMP0	RMB	1
+*
+*
+*TEMPORARIES
+*
+TMPRAM	EQU	*	TEMPORARY RAM
+TEMPX	RMB	2	X TEMPS
+XPLAY	RMB	2						;;$8C
+XPTR	RMB	2						;;$8E
+TEMPA	RMB	1	ACCA TEMP				;;$87
+TEMPB	RMB	1
+LOCRAM	EQU	$0090
+*
+*ORGAN PARAMETERS
+*
+	ORG	LOCRAM
+DUR	RMB	2	NOTE DURATION				;;$91
+OSCIL	RMB	1	OSCILLATORS				;;$93
+RDELAY	RMB	60	RAM DELAY LOAD
+;;---------------------------------------------------------------------
 ;;
 ;;   Sound ID $52 is a potentially unused organ tune.  The ORGTAB
 ;;   that contains all the notes is located here at the very beginning.
@@ -204,6 +243,16 @@ E0C5: 0029,071E
 E0C9: 383F			;;(A3)
 E0CB: 02FE 
 ;; ORGAN ROUTINE
+;;------------------------------
+;;   EQUATES
+;;
+;;ORGFLG	EQU	$0090
+;;ORGTAB	EQU	$E000
+;;TEMPA		EQU	$87
+;;XPTR		EQU	$8E
+;;XPLAY		EQU	$8C
+;;OSCIL		EQU	$93
+;;
 E0CD: 4F       clra
 E0CE: 7F 00 90 clr  $0090		;;(ORGFLG)
 E0D1: 97 87    sta  $87			;TUNE NUMBER
