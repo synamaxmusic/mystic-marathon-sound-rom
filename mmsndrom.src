@@ -304,11 +304,12 @@ E15B: 7E 00 94 jmp  $0094
 ;;ORGAN2
 E15E: 39       rts  
 ;;
-;;	(Appears to be a general noise routine.  There's similarities to
-;;	routines found in other sound roms.  NOISE1 gets called a lot by
-;;	a few of the unused noise synth routines.)
+;;	(Appears to be a general noise routine, very similar to the LITE1 
+;;	routine found in other sound roms.  SINOISE [Sinistar Noise]
+;;  gets called a lot by a few of the unused noise synth routines in
+;;  VSNDRM9.)
 ;;	
-;;NOISE1
+;;SINOISE
 E15F: 96 81    lda  $81
 E161: 44       lsra 
 E162: 98 81    eora $81
@@ -328,7 +329,7 @@ E177: 97 8C    sta  $8C
 E179: DE 8C    ldx  $8C
 E17B: 39       rts  
 ;;
-;;  (don't know what this is)
+;;  (don't know what this is...something to do with white noise)
 ;;
 E17C: C6 BF    ldb  #$BF
 E17E: 4F       clra 
@@ -363,6 +364,7 @@ E1B1: 73 20 02 com  $2002
 E1B4: 5A       decb 
 E1B5: 26 E2    bne  $E199
 E1B7: 39       rts  
+;;
 E1B8: C6 01    ldb  #$01
 E1BA: 7F 20 02 clr  $2002
 E1BD: BD E1 5F jsr  $E15F
@@ -527,9 +529,13 @@ E2F0: 96 95    lda  $95
 E2F2: 27 D0    beq  $E2C4
 E2F4: 20 CC    bra  $E2C2
 E2F6: 39       rts  
+;;
+;;LITE
 E2F7: 86 01    lda  #$01
 E2F9: 97 97    sta  $97
 E2FB: C6 03    ldb  #$03
+;;
+;;LITEN
 E2FD: 97 96    sta  $96
 E2FF: 86 FF    lda  #$FF
 E301: B7 20 02 sta  $2002
@@ -554,7 +560,9 @@ E323: 96 96    lda  $96
 E325: 9B 97    adda $97
 E327: 97 96    sta  $96
 E329: 26 DB    bne  $E306
-E32B: 39       rts  
+E32B: 39       rts 
+;;
+;;
 E32C: 7F 20 04 clr  $2004
 E32F: CE E3 73 ldx  #$E373
 E332: DF 92    stx  $92
@@ -2762,7 +2770,14 @@ F599: 01       nop
 F59A: 40       nega 
 F59B: 10       sba  
 F59C: 00       illegal
+;;
+;;HBOMB
 F59D: CE F5 97 ldx  #$F597
+*
+*LOADER
+*
+;;
+;;FNLOAD
 F5A0: A6 00    lda  (x+$00)
 F5A2: 97 96    sta  $96
 F5A4: A6 01    lda  (x+$01)
@@ -2770,6 +2785,14 @@ F5A6: 97 97    sta  $97
 F5A8: A6 02    lda  (x+$02)
 F5AA: E6 03    ldb  (x+$03)
 F5AC: EE 04    ldx  (x+$04)
+*
+*FILTERED NOISE ROUTINE
+*X=SAMPLE COUNT, ACCB=INITIAL MAX FREQ
+*ACCA=FREQ DECAY FLAG ,DSFLG=DISTORTION FLAG
+*
+;;
+;; (new stuff)
+;; 
 F5AE: 20 0F    bra  $F5BF
 F5B0: C6 02    ldb  #$02
 F5B2: 20 06    bra  $F5BA
@@ -2779,12 +2802,19 @@ F5B8: C6 04    ldb  #$04
 F5BA: 4F       clra 
 F5BB: 97 97    sta  $97
 F5BD: 97 96    sta  $96
+;;
+;;
+;;FNOISE
 F5BF: 97 95    sta  $95
 F5C1: D7 90    stb  $90
 F5C3: DF 93    stx  $93
 F5C5: 7F 00 92 clr  $0092
+;;
+;;FNOIS0
 F5C8: DE 93    ldx  $93
 F5CA: B6 20 02 lda  $2002
+;;
+;;FNOIS1
 F5CD: 16       tab  
 F5CE: 54       lsrb 
 F5CF: 54       lsrb 
@@ -2798,10 +2828,14 @@ F5DC: 7D 00 96 tst  $0096
 F5DF: 27 04    beq  $F5E5
 F5E1: D4 80    andb $80
 F5E3: DB 97    addb $97
+;;
+;;FNOIS2	
 F5E5: D7 91    stb  $91
 F5E7: D6 92    ldb  $92
 F5E9: 91 81    cmpa $81
 F5EB: 22 12    bhi  $F5FF
+;;
+;;FNOIS3
 F5ED: 09       dex  
 F5EE: 27 26    beq  $F616
 F5F0: B7 20 02 sta  $2002
@@ -2811,6 +2845,8 @@ F5F7: 25 16    bcs  $F60F
 F5F9: 91 81    cmpa $81
 F5FB: 23 F0    bls  $F5ED
 F5FD: 20 10    bra  $F60F
+;;
+;;FNOIS4
 F5FF: 09       dex  
 F600: 27 14    beq  $F616
 F602: B7 20 02 sta  $2002
@@ -2819,9 +2855,13 @@ F607: 92 91    sbca $91
 F609: 25 04    bcs  $F60F
 F60B: 91 81    cmpa $81
 F60D: 22 F0    bhi  $F5FF
+;;
+;;FNOIS5
 F60F: 96 81    lda  $81
 F611: B7 20 02 sta  $2002
 F614: 20 B7    bra  $F5CD
+;;
+;;FNOIS6	
 F616: D6 95    ldb  $95
 F618: 27 B3    beq  $F5CD
 F61A: 96 90    lda  $90
@@ -2843,6 +2883,8 @@ F630: 26 96    bne  $F5C8
 F632: C1 07    cmpb #$07
 F634: 26 92    bne  $F5C8
 F636: 39       rts  
+;;
+;;
 F637: 7F 20 02 clr  $2002
 F63A: CE 10 00 ldx  #$1000
 F63D: 09       dex  
@@ -2855,6 +2897,12 @@ F649: DF 8E    stx  $8E
 F64B: C6 AF    ldb  #$AF
 F64D: D7 89    stb  $89
 F64F: 39       rts  
+*
+*
+* THREE OSCILLATOR SOUND GENERATOR
+*
+;;
+;;PLAY	
 F650: DF 8C    stx  $8C
 F652: CE F6 F5 ldx  #$F6F5
 F655: DF 84    stx  $84
@@ -2935,6 +2983,11 @@ F6E5: AD 00    jsr  (x+$00)
 F6E7: 7E F6 59 jmp  $F659
 F6EA: DE 8C    ldx  $8C
 F6EC: 39       rts  
+*
+* ECHO AND DECAY ROUTINE
+*
+;;
+;;RDECAY	
 F6ED: 54       lsrb 
 F6EE: 54       lsrb 
 F6EF: 54       lsrb 
@@ -2943,8 +2996,11 @@ F6F1: 54       lsrb
 F6F2: 54       lsrb 
 F6F3: 54       lsrb 
 F6F4: 54       lsrb 
+;;
+;;DECAYZ	
 F6F5: F7 20 02 stb  $2002
 F6F8: 39       rts  
+;;
 F6F9: BD F6 41 jsr  $F641
 F6FC: CE F7 6C ldx  #$F76C
 F6FF: 20 0E    bra  $F70F
@@ -3227,6 +3283,11 @@ F8DF: 1B       aba
 F8E0: CE F8 BE ldx  #$F8BE
 F8E3: BD E1 6D jsr  $E16D
 F8E6: 7E F9 50 jmp  $F950
+*
+*
+*CROWD ROAR
+;;
+;;CDR	
 F8E9: CE F9 08 ldx  #$F908
 F8EC: DF A1    stx  $A1
 F8EE: BD FA 32 jsr  $FA32
@@ -3238,43 +3299,69 @@ F8FC: BD F9 D6 jsr  $F9D6
 F8FF: CE F9 36 ldx  #$F936
 F902: BD F9 3B jsr  $F93B
 F905: 7E F9 E3 jmp  $F9E3
-F908: 90 10    suba $10
-F90A: 02       illegal
-F90B: 14       illegal
-F90C: 40       nega 
-F90D: B4 40 FF anda $40FF
-F910: 14       illegal
-F911: 30       tsx  
-F912: D0 32    subb $32
-F914: 02       illegal
-F915: 10       sba  
-F916: 60 EE    neg  (x+$EE)
-F918: 20 02    bra  $F91C
-F91A: 08       inx  
-F91B: 54       lsrb 
-F91C: E9 54    adcb (x+$54)
-F91E: FF 20 28 stx  $2028
-F921: C0 30    subb #$30
-F923: 02       illegal
-F924: 14       illegal
-F925: 58       aslb 
-F926: AC 20    cmpx (x+$20)
-F928: 02       illegal
-F929: 08       inx  
-F92A: 58       aslb 
-F92B: A6 58    lda  (x+$58)
-F92D: FF 18 22 stx  $1822
-F930: 00       illegal
-F931: 30       tsx  
-F932: 10       sba  
-F933: FC       illegal
-F934: 00       illegal
-F935: 01       nop  
-F936: 30       tsx  
-F937: FC       illegal
-F938: 01       nop  
-F939: 00       illegal
-F93A: 01       nop  
+;;
+;;
+*WHISTLE PARAMS
+WS1	FCB	$90,$10,2,$14,$40
+	FCB	$B4,$40,$FF,$14,$30
+	FCB	$D0,$32,$2,$10,$60
+	FCB	$EE,$20,2,8,$54
+	FCB	$E9,$54,$FF,$20,$28
+	FCB	$C0,$30,2,$14,$58
+	FCB	$AC,$20,$2,$8,$58
+	FCB	$A6,$58,$FF,$18,$22
+	FCB	0
+CR1	FCB	$30,$10,$FC,0,1
+CR2	FCB	$30,$FC,1,0,1
+*
+*
+F908: 90 10    
+F90A: 02       
+F90B: 14      
+F90C: 40      
+F90D: B4 40 FF 
+F910: 14      
+F911: 30      
+F912: D0 32   
+F914: 02    
+F915: 10   
+F916: 60 EE 
+F918: 20 02 
+F91A: 08     
+F91B: 54      
+F91C: E9 54   
+F91E: FF 20 28
+F921: C0 30   
+F923: 02      
+F924: 14      
+F925: 58      
+F926: AC 20   
+F928: 02     
+F929: 08       
+F92A: 58       
+F92B: A6 58    
+F92D: FF 18 22 
+F930: 00      
+F931: 30      
+F932: 10      
+F933: FC      
+F934: 00       
+F935: 01      
+F936: 30     
+F937: FC      
+F938: 01     
+F939: 00     
+F93A: 01     
+*
+*
+*WHITE NOISE ROUTINE
+*NFRQ=INIT PERIOD, NAMP=INIT AMP, DECAY AMPLITUDE RATE
+*CYCNT=CYCLE COUNT, NFFLG= FREQ DECAY FLAG
+*NFFLG=0 NO FREQ CHANGE;=POS DECAY;=MINUS INC FREQ
+*NOISE LOAD PROG-ENTER WITH XREG POINTING TO DATA
+*
+;;
+;;NOISLD
 F93B: A6 00    lda  (x+$00)
 F93D: 97 A8    sta  $A8
 F93F: A6 01    lda  (x+$01)
@@ -3285,7 +3372,12 @@ F947: A6 03    lda  (x+$03)
 F949: 97 95    sta  $95
 F94B: A6 04    lda  (x+$04)
 F94D: 97 AD    sta  $AD
+;;
+;;NEND
 F94F: 39       rts  
+*
+*LOAD NOISE AND GO
+*
 F950: 8D E9    bsr  $F93B
 F952: 8D 30    bsr  $F984
 F954: 8D 58    bsr  $F9AE
@@ -3314,6 +3406,11 @@ F987: 96 AD    lda  $AD
 F989: 97 AC    sta  $AC
 F98B: 7F 00 AB clr  $00AB
 F98E: 39       rts  
+* 23 CYCLES FOR EACH SUBROUTINE PLUS CALLING OVERHEAD
+*
+*
+;;
+;;NOISE1
 F98F: 96 81    lda  $81
 F991: 44       lsra 
 F992: 44       lsra 
@@ -3323,6 +3420,8 @@ F996: 97 A6    sta  $A6
 F998: 08       inx  
 F999: 84 07    anda #$07
 F99B: 39       rts  
+;;
+;;NOISE2	
 F99C: 96 A6    lda  $A6
 F99E: 44       lsra 
 F99F: 76 00 80 ror  $0080
@@ -3354,12 +3453,18 @@ F9CF: 96 91    lda  $91
 F9D1: 90 90    suba $90
 F9D3: 97 91    sta  $91
 F9D5: 39       rts  
+*
+* NOISE WITH WHISTLE MAIN LOOP
 F9D6: 7F 00 9F clr  $009F
 F9D9: 7F 00 A9 clr  $00A9
 F9DC: 86 0E    lda  #$0E
 F9DE: 97 A0    sta  $A0
 F9E0: 7F 00 A5 clr  $00A5
+;;
+;;NINIT2	
 F9E3: 8D 9F    bsr  $F984
+;;
+;;WIN	
 F9E5: 8D A8    bsr  $F98F
 F9E7: BD FA 6C jsr  $FA6C
 F9EA: 8D B0    bsr  $F99C
@@ -3429,13 +3534,18 @@ FA67: 96 AA    lda  $AA
 FA69: 97 A9    sta  $A9
 FA6B: 39       rts  
 ;;
+;;TRIDR
 FA6C: 96 A5    lda  $A5
 FA6E: 9B 9F    adda $9F
 FA70: 97 A5    sta  $A5
 FA72: 2A 01    bpl  $FA75
 FA74: 43       coma 
+;;
+;;GO
 FA75: 1B       aba  
 FA76: B7 20 02 sta  $2002
+;;
+;;NSEND	
 FA79: 39       rts  
 ;;
 ;; WALSH FUNCTION SOUND MACHINE
