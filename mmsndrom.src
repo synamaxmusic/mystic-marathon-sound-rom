@@ -113,6 +113,11 @@ C3	EQU	$3829
 BF3	EQU	$3837
 ;;
 RS	EQU	$0029		;;(rest note)
+;;---------------------------------------------------------------------
+;;
+;;    Looking at the Organ routine, it's obvious that much of it
+;;    was taken from Sinistar's Video Sound Rom 9.
+;;
 *
 * ORGAN TUNE TABLE
 * OSCILLATOR MASK(1),DELAY(1),DURATION(2)
@@ -215,6 +220,7 @@ E0E6: DF 8E    stx  $8E
 E0E8: BD E1 6D jsr  $E16D
 E0EB: DF 8C    stx  $8C
 E0ED: DE 8E    ldx  $8E
+;;ORGNT4	
 E0EF: A6 00    lda  (x+$00)
 E0F1: 97 93    sta  $93
 E0F3: A6 01    lda  (x+$01)
@@ -229,7 +235,17 @@ E100: 08       inx
 E101: DF 8E    stx  $8E
 E103: 9C 8C    cmpx $8C
 E105: 26 E8    bne  $E0EF
-E107: 39       rts  
+;;ORGNT5
+E107: 39       rts        		  ;;(This matches up with VSNDRM3)
+;;
+*
+*ORGAN NOTE
+*4 BYTES(MODE,OSCILLATOR MASK HI+1,LO+1,NOTE#)				
+*
+*ORGAN LOADER
+*OSCIL=OSCILLATOR MASK, ACCA=DELAY, DUR=DURATION
+*
+;;ORGANL (again based off of VSNDRM9)
 E108: CE 00 94 ldx  #$0094
 E10B: 81 00    cmpa #$00
 E10D: 27 15    beq  $E124
@@ -247,11 +263,13 @@ E122: 08       inx
 E123: 08       inx  
 E124: C6 7E    ldb  #$7E
 E126: E7 00    stb  (x+$00)
-E128: C6 E1    ldb  #$E1
+E128: C6 E1    ldb  #$E1    		;;LDAB   	#ORGAN1>>8
 E12A: E7 01    stb  (x+$01)
-E12C: C6 32    ldb  #$32
+E12C: C6 32    ldb  #$32    		;;LDAB  	#ORGAN1&$FF
 E12E: E7 02    stb  (x+$02)
+;;ORGAN
 E130: DE 91    ldx  $91
+;;ORGAN1
 E132: 4F       clra 
 E133: F6 00 88 ldb  $0088
 E136: 5C       incb 
@@ -271,6 +289,9 @@ E14A: 54       lsrb
 E14B: 89 00    adca #$00
 E14D: 54       lsrb 
 E14E: 89 00    adca #$00
+;;
+;;  ABA instruction usually goes here but it's gone, just like in VSNDRM9
+;;
 E150: 48       asla 
 E151: 48       asla 
 E152: 48       asla 
@@ -280,7 +301,14 @@ E155: B7 20 02 sta  $2002
 E158: 09       dex  
 E159: 27 03    beq  $E15E
 E15B: 7E 00 94 jmp  $0094
+;;ORGAN2
 E15E: 39       rts  
+;;
+;;	(Appears to be a general noise routine.  There's similarities to
+;;	routines found in other sound roms.  NOISE1 gets called a lot by
+;;	a few of the unused noise synth routines.)
+;;	
+;;NOISE1
 E15F: 96 81    lda  $81
 E161: 44       lsra 
 E162: 98 81    eora $81
@@ -289,15 +317,18 @@ E165: 44       lsra
 E166: 76 00 80 ror  $0080
 E169: 76 00 81 ror  $0081
 E16C: 39       rts  
-;;
+;;ADDX
 E16D: DF 8C    stx  $8C
 E16F: 9B 8D    adda $8D
 E171: 97 8D    sta  $8D
 E173: 96 8C    lda  $8C
 E175: 89 00    adca #$00
 E177: 97 8C    sta  $8C
+;;ADDX1
 E179: DE 8C    ldx  $8C
 E17B: 39       rts  
+;;
+;;  (don't know what this is)
 ;;
 E17C: C6 BF    ldb  #$BF
 E17E: 4F       clra 
@@ -580,7 +611,10 @@ E38F: 00       illegal
 E390: 00       illegal
 E391: 8D 03    bsr  $E396
 E393: 7E F1 E1 jmp  $F1E1
-;;
+*
+*
+*GWAVE LOADER
+;;GWLD
 E396: 16       tab  
 E397: 58       aslb 
 E398: 1B       aba  
@@ -608,6 +642,7 @@ E3B7: 84 0F    anda #$0F
 E3B9: 97 87    sta  $87
 E3BB: DF 8A    stx  $8A
 E3BD: CE F2 C0 ldx  #$F2C0
+;;GWLD2	
 E3C0: 7A 00 87 dec  $0087
 E3C3: 2B 08    bmi  $E3CD
 E3C5: A6 00    lda  (x+$00)
@@ -3402,7 +3437,9 @@ FA74: 43       coma
 FA75: 1B       aba  
 FA76: B7 20 02 sta  $2002
 FA79: 39       rts  
+;;
 ;; WALSH FUNCTION SOUND MACHINE
+;;
 ;;NTHRVC
 FA7A: C0 0D    subb #$0D
 FA7C: 37       pshb 
@@ -3936,6 +3973,7 @@ FE66: 97 B8    sta  $B8
 FE68: CE FE 2D ldx  #$FE2D
 FE6B: DF AD    stx  $AD
 FE6D: 39       rts  
+;;
 ;;ODDTBL
 FE6E: 0000       illegal
 FE70: 5555       illegal
@@ -3946,6 +3984,7 @@ FE78: C731    stb  #$31
 FE7A: 0000       illegal
 FE7C: FFFF
 FE7E: 01FE
+;;
 ;;WAVE PROGRAMS 
 FE80: 53 00 ldx  $5300
 FE82: 66 16    ror  (x+$16)
@@ -3979,6 +4018,7 @@ FEAF: 40       nega
 FEB0: 08       inx  
 FEB1: FF 08 00 stx  $0800
 FEB4: 40       nega 
+;;
 ;; Pitch Program
 FEB5: 10       sba  
 FEB6: 20 80    bra  $FE38
@@ -4074,6 +4114,9 @@ FF3E: FE 80 FE B5
 FF42: FE CD FE DD  
 FF46: FE E4 FF 13       		;;Hit by Apple SFX
 FF4A: FF 22 FF 32      
+;;
+;;  Appears to be some sort of jump table
+;;
 FF4E: 86 00    lda  #$00
 FF50: 20 6D    bra  $FFBF
 FF52: 86 01    lda  #$01
