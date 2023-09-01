@@ -32,8 +32,10 @@
 ;  The first kilobyte has several synth routines, while the main program
 ;  is located in the remaining half at $F000.
 ;
-;  Mystic Marathon has the largest amount of different GWAVE "presets",
-;  with 24 different sounds found in SVTAB.  Inferno only has 12!
+;  Mystic Marathon has the largest amount of different GWAVE "presets".
+;  Instead of one, there are actually two sound vector tables and one
+;  of them has 24 different sounds found inside.  Meanwhile, Inferno
+;  has only 12 found so far!
 ;
 ;;---------------------------------------------------------------------
 ;;
@@ -70,7 +72,7 @@ ORGFLG	RMB	1	ORGAN FLAG
 HI	RMB	1	RANDOM SEED				;;$80
 LO	RMB	1	RANDOM SEED				;;$81
 XDECAY	RMB	2
-AMP0	RMB	1
+AMP0	RMB	1						;;$89
 *
 *
 *TEMPORARIES
@@ -80,8 +82,30 @@ TEMPX	RMB	2	X TEMPS
 XPLAY	RMB	2						;;$8C
 XPTR	RMB	2						;;$8E
 TEMPA	RMB	1	ACCA TEMP				;;$87
-TEMPB	RMB	1
+TEMPB	RMB	1						;;$88
 LOCRAM	EQU	$0090
+*
+*GWAVE PARAMETERS
+*
+	ORG	LOCRAM+1
+GECHO	RMB	1	ECHO FLAG				;;$91
+GCCNT	RMB	1	CYCLE COUNT				;;$92
+GECDEC	RMB	1	# OF DECAYS PER ECHO			;;$93
+GDFINC	RMB	1	DELTA FREQ INC				;;$94
+GDCNT	RMB	1	DELTA FREQ COUNT			;;$95
+GWFRM	RMB	2	WAVEFORM ADDRESS			;;$96
+*TEMPORARY OR COMPUTED PARAMETERS
+PRDECA	RMB	1	PRE-DECAY FACTOR			;;$98
+GWFRQ	RMB	2	FREQ TABLE ADDR				;;$99
+FRQEND	RMB	2	END ADDR FREQ TABLE			;;$9B
+WVEND	RMB	2	WAVE END ADDR				;;$9D
+GPER	RMB	1	PERIOD					;;$9F
+GECNT	RMB	1	# OF ECHOES COUNTER			;;$A0
+FOFSET	RMB	1	FREQUENCY OFFSET			;;$A1
+*
+*GWAVE TABLES
+*
+GWTAB	RMB	WVELEN	WAVE TABLE
 *
 *ORGAN PARAMETERS
 *
@@ -89,6 +113,49 @@ LOCRAM	EQU	$0090
 DUR	RMB	2	NOTE DURATION				;;$91
 OSCIL	RMB	1	OSCILLATORS				;;$93
 RDELAY	RMB	60	RAM DELAY LOAD
+*
+* FLASH LOCAL RAM
+	ORG	LOCRAM
+FREQ1	RMB	1	FREQUENCY CONSTANT 1
+FREQ2	RMB	1	FREQUENCY CONSTANT 2
+FREQ3	RMB	1	FREQUENCY CONSTANT 3
+FREQ4	RMB	1	FREQUENCY CONSTANT 4
+DELTA1	RMB	1	DELTA AMPLITUDE 1
+DELTA2	RMB	1	DELTA AMPLITUDE 2
+DELTA3	RMB	1	DELTA AMPLITUDE 3
+DELTA4	RMB	1	DELTA AMPLITUDE 4
+FREQ1$	RMB	1	FREQUENCY COUNTER 1
+FREQ2$	RMB	1	FREQUENCY COUNTER 2
+FREQ3$	RMB	1	FREQUENCY COUNTER 3
+FREQ4$	RMB	1	FREQUENCY COUNTER 4
+CYCLE1	RMB	1	CYCLE CONSTANT 1
+CYCLE2	RMB	1	CYCLE CONSTANT 2
+CYCLE3	RMB	1	CYCLE CONSTANT 3
+CYCLE4	RMB	1	CYCLE CONSTANT 4
+DFREQ1	RMB	1	DELTA FREQUENCY 1
+DFREQ2	RMB	1	DELTA FREQUENCY 2
+DFREQ3	RMB	1	DELTA FREQUENCY 3
+DFREQ4	RMB	1	DELTA FREQUENCY 4
+EFREQ1	RMB	1	END FREQUENCY 1
+EFREQ2	RMB	1	END FREQUENCY 2
+EFREQ3	RMB	1	END FREQUENCY 3
+EFREQ4	RMB	1	END FREQUENCY 4
+CYCL1$	RMB	1	CYCLE COUNTER 1
+CYCL2$	RMB	1	CYCLE COUNTER 2
+CYCL3$	RMB	1	CYCLE COUNTER 3
+CYCL4$	RMB	1	CYCLE COUNTER 4
+SNDX1	RMB	1
+
+RANDOM	EQU	LO	SINGLE BYTE RANDOM
+	ORG	LOCRAM+1
+FREQ$	RMB	1	START FREQUENCY				;;$91
+C$FRQ	RMB	1	CYCLES AT FREQUENCY			;;$92
+D$FRQ	RMB	1	DELTA FREQUENCY				;;$93
+E$FRQ	RMB	1	END FREQUENCY				;;$94
+C$AMP	RMB	1	CYCLES AT AMPLITUDE			;;$95
+D$AMP	RMB	1	DELTA AMPLITUDE				;;$96
+C$AMP$	RMB	1	CYCLE COUNTER
+C$FRQ$	RMB	1	CYCLE COUNTER
 *
 *NOISE/CROWD ROAR ROUTINE PARAMETERS
 *
@@ -116,7 +183,7 @@ WCNT2	RMB	1
 CURVAL	RMB	1	WHISTLING NOISE OUTPUT
 ATP	RMB	1	INTERM NOISE VAL			;;$A6
 MINWIS	RMB	1	MIN WHISTLE FREQ
-CY2	RMB	1	NOISE CYCLE COUNTER
+CY2	RMB	1	NOISE CYCLE COUNTER			;;$A8
 DFRQ	RMB	1	WHISTLE FREQ CHANGE
 DFRQ2	RMB	1	INIT WHISTLE FREQ CHANGE
 NNOIS	RMB	1	NEXT NOISE VALUE
@@ -401,6 +468,7 @@ E165: 44       lsra
 E166: 76 00 80 ror  $0080
 E169: 76 00 81 ror  $0081
 E16C: 39       rts  
+;;
 ;;ADDX
 E16D: DF 8C    stx  $8C
 E16F: 9B 8D    adda $8D
@@ -408,6 +476,7 @@ E171: 97 8D    sta  $8D
 E173: 96 8C    lda  $8C
 E175: 89 00    adca #$00
 E177: 97 8C    sta  $8C
+;;
 ;;ADDX1
 E179: DE 8C    ldx  $8C
 E17B: 39       rts  
@@ -448,6 +517,7 @@ E1B4: 5A       decb
 E1B5: 26 E2    bne  $E199
 E1B7: 39       rts  
 ;;
+;;
 E1B8: C6 01    ldb  #$01
 E1BA: 7F 20 02 clr  $2002
 E1BD: BD E1 5F jsr  $E15F
@@ -483,14 +553,23 @@ E1F5: CE E1 EB ldx  #$E1EB
 E1F8: 8D EB    bsr  $E1E5
 E1FA: 8D 02    bsr  $E1FE
 E1FC: 20 FA    bra  $E1F8
+*
+*	ECHO FUNCTION
+*
+;;
+;;ECHO	
 E1FE: 96 89    lda  $89
 E200: 80 08    suba #$08
 E202: 2A 03    bpl  $E207
 E204: 97 89    sta  $89
 E206: 39       rts  
+;;
+;;ECHO1	
 E207: 32       pula 
 E208: 32       pula 
 E209: 39       rts  
+;;
+;;
 E20A: C6 11    ldb  #$11
 E20C: D7 AC    stb  $AC
 E20E: 86 FE    lda  #$FE
@@ -769,63 +848,19 @@ E3F3: 7F 00 A1 clr  $00A1
 E3F6: BD E1 6D jsr  $E16D
 E3F9: DF 9B    stx  $9B
 E3FB: 39       rts  
-E3FC: 81 24    cmpa #$24
-E3FE: 03       illegal
-E3FF: 00       illegal
-E400: 00       illegal
-E401: 16       tab  
-E402: 31       ins  
-E403: 41       illegal
-E404: 45       illegal
-E405: 00       illegal
-E406: 00       illegal
-E407: 00       illegal
-E408: 0F       sei  
-E409: 5B       illegal
-E40A: F4 12 00 andb $1200
-E40D: 00       illegal
-E40E: 00       illegal
-E40F: 14       illegal
-E410: 47       asra 
-E411: 21 3F    brn  $E452
-E413: 12       illegal
-E414: FE 01 20 ldx  $0120
-E417: 1B       aba  
-E418: F8 5B 07 eorb $5B07
-E41B: 03       illegal
-E41C: 01       nop  
-E41D: 05       illegal
-E41E: 94 E3    anda $E3
-E420: 12       illegal
-E421: 03       illegal
-E422: 00       illegal
-E423: 02       illegal
-E424: 06       tap  
-E425: 9A 16    ora  $16
-E427: 17       tba  
-E428: 00       illegal
-E429: 00       illegal
-E42A: 00       illegal
-E42B: 0A       clv  
-E42C: 10       sba  
-E42D: A4 25    anda (x+$25)
-E42F: FE FE 01 ldx  $FE01
-E432: 02       illegal
-E433: FE FE 1A ldx  $FE1A
-E436: 00       illegal
-E437: 00       illegal
-E438: 00       illegal
-E439: 08       inx  
-E43A: 6E 82    jmp  (x+$82)
-E43C: 22 00    bhi  $E43E
-E43E: 00       illegal
-E43F: 00       illegal
-E440: 18       illegal
-E441: C6 21    ldb  #$21
-E443: 30       tsx  
-E444: 00       illegal
-E445: FF 30 20 stx  $3020
-E448: 0D       sec  
+;;
+;;SVTAB
+E3FC: 81 24 03 00 00 16 31
+E403: 41 45 00 00 00 0F 5B
+E40A: F4 12 00 00 00 14 47
+E411: 21 3F 12 FE 01 20 1B
+E418: F8 5B 07 03 01 05 94 
+E41F: E3 12 03 00 02 06 9A
+E426: 16 17 00 00 00 0A 10
+E42D: A4 25 FE FE 01 02 FE
+E434: FE 1A 00 00 00 08 6E 
+E43B: 82 22 00 00 00 18 C6 
+E442: 21 30 00 FF 30 20 0D
 E449: B2 10 05 sbca $1005
 E44C: 00       illegal
 E44D: 00       illegal
@@ -884,7 +919,10 @@ E491: 00       illegal
 E492: 00       illegal
 E493: 00       illegal
 E494: 08       inx  
-E495: 88 A0    eora #$A0
+E495: 88 
+;;
+;;GFRTAB
+E496: A0    eora #$A0
 E497: 98 90    eora $90
 E499: 88 80    eora #$80
 E49B: 78 70 68 asl  $7068
@@ -2287,6 +2325,10 @@ F1D8: 7F 00 A1 clr  $00A1
 F1DB: BD E1 6D jsr  $E16D
 F1DE: DF 9B    stx  $9B
 F1E0: 39       rts  
+*
+*GWAVE ROUTINE
+*ACCA= FREQ PATTERN LENGTH, X= FREQ PAT ADDR
+*
 F1E1: 96 91    lda  $91
 F1E3: 97 A0    sta  $A0
 F1E5: DE 99    ldx  $99
@@ -2402,7 +2444,14 @@ F2A6: 08       inx
 F2A7: 9C 9D    cmpx $9D
 F2A9: 26 DE    bne  $F289
 F2AB: 39       rts  
+*
+*PARAMETER TRANSFER
+*
+;;
+;;TRANS
 F2AC: 36       psha 
+;;
+;;TRANS1
 F2AD: A6 00    lda  (x+$00)
 F2AF: DF 8C    stx  $8C
 F2B1: DE 8E    ldx  $8E
@@ -3207,6 +3256,18 @@ F7B8: 96 9A    lda  $9A
 F7BA: 81 20    cmpa #$20
 F7BC: 26 D5    bne  $F793
 F7BE: 39       rts  
+;;
+*     SINE TABLE
+SINTBL	FCB	$80,$8C,$98,$A5,$B0,$BC,$C6,$D0
+	FCB	$DA,$E2,$EA,$F0,$F5,$FA,$FD,$FE
+	FCB	$FF,$FE,$FD,$FA,$F5,$F0,$EA,$E2
+	FCB	$DA,$D0,$C6,$BC,$B0,$A5,$98,$8C
+	FCB	$80,$73,$67,$5A,$4F,$43,$39,$2F
+	FCB	$25,$1D,$15,$0F,$0A,$05,$02,$01
+	FCB	$00,$01,$02,$05,$0A,$0F,$15,$1D
+	FCB	$25,$2F,$39,$43,$4F,$5A,$67,$73
+;;
+;;
 F7BF: 80 8C    suba #$8C
 F7C1: 98 A5    eora $A5
 F7C3: B0 BC C6 suba $BCC6
@@ -3248,6 +3309,9 @@ F7FA: 43       coma
 F7FB: 4F       clra 
 F7FC: 5A       decb 
 F7FD: 67 73    asr  (x+$73)
+;;
+;;
+;;
 F7FF: FE 04 02 ldx  $0402
 F802: 04       illegal
 F803: FF 00 BD stx  $00BD
@@ -3274,6 +3338,11 @@ F830: 8D 1D    bsr  $F84F
 F832: 5A       decb 
 F833: 26 EC    bne  $F821
 F835: 39       rts  
+*
+*	MOVE PARAMETERS
+*
+;;
+;;MOVE	
 F836: A6 00    lda  (x+$00)
 F838: 97 91    sta  $91
 F83A: A6 01    lda  (x+$01)
@@ -3287,15 +3356,24 @@ F848: 97 95    sta  $95
 F84A: A6 05    lda  (x+$05)
 F84C: 97 96    sta  $96
 F84E: 39       rts  
+*
+*	DELTA F, DELTA A ROUTINE
+*
+;;
+;;SING
 F84F: 96 89    lda  $89
 F851: 37       pshb 
 F852: D6 95    ldb  $95
 F854: D7 97    stb  $97
 F856: D6 92    ldb  $92
 F858: D7 98    stb  $98
+;;
+;;SING1	
 F85A: 43       coma 
 F85B: D6 91    ldb  $91
 F85D: B7 20 02 sta  $2002
+;;
+;;SING2
 F860: 5A       decb 
 F861: 26 FD    bne  $F860
 F863: 43       coma 
@@ -3306,6 +3384,8 @@ F869: 09       dex
 F86A: 08       inx  
 F86B: 09       dex  
 F86C: B7 20 02 sta  $2002
+;;
+;;SING3	
 F86F: 5A       decb 
 F870: 26 FD    bne  $F86F
 F872: 7A 00 98 dec  $0098
@@ -3541,13 +3621,19 @@ F9C6: 27 04    beq  $F9CC
 F9C8: 08       inx  
 F9C9: 09       dex  
 F9CA: 20 09    bra  $F9D5
+;;
+;;NW2	
 F9CC: 7F 00 92 clr  $0092
 F9CF: 96 91    lda  $91
 F9D1: 90 90    suba $90
 F9D3: 97 91    sta  $91
+;;
+;;NW3
 F9D5: 39       rts  
 *
 * NOISE WITH WHISTLE MAIN LOOP
+;;
+;;NINIT	
 F9D6: 7F 00 9F clr  $009F
 F9D9: 7F 00 A9 clr  $00A9
 F9DC: 86 0E    lda  #$0E
@@ -3608,10 +3694,16 @@ FA46: 97 A7    sta  $A7
 FA48: 86 05    lda  #$05
 FA4A: BD E1 6D jsr  $E16D
 FA4D: DF A1    stx  $A1
+;;
+;;NW7	
 FA4F: 39       rts  
+;;
+;;PEND	
 FA50: 32       pula 
 FA51: 32       pula 
 FA52: 39       rts  
+;;
+;;NNW	
 FA53: 96 9E    lda  $9E
 FA55: 27 06    beq  $FA5D
 FA57: 91 91    cmpa $91
@@ -3620,6 +3712,8 @@ FA5B: 20 03    bra  $FA60
 FA5D: 08       inx  
 FA5E: 09       dex  
 FA5F: 39       rts  
+;;
+;;WINIT
 FA60: 7F 00 9E clr  $009E
 FA63: 96 A3    lda  $A3
 FA65: 97 9F    sta  $9F
