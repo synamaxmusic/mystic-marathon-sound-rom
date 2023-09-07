@@ -2034,11 +2034,16 @@ F031: B6 20 00 lda  $2000
 F034: 0E       cli  
 F035: 8D 20    bsr  $F057
 F037: 20 FE    bra  $F037		;;(wait for interrupt again)
+*
+* DIAGNOSTIC PROCESSING HERE
+*
+;;NMI
 F039: 0F       sei  
 F03A: 8E 00 FF lds  #$00FF
 F03D: 4F       clra 
 F03E: CE FF FF ldx  #$FFFF
 F041: 5F       clrb 
+;;NMI1
 F042: E9 00    adcb (x+$00)
 F044: 09       dex  
 F045: 8C F0 00 cmpx #$F000
@@ -2046,12 +2051,13 @@ F048: 26 F8    bne  $F042
 F04A: E1 00    cmpb (x+$00)
 F04C: 27 01    beq  $F04F
 F04E: 3E       wai  
+;;NMI2
 F04F: 4C       inca 
 F050: 36       psha 
 F051: BD F0 57 jsr  $F057
 F054: 32       pula 
 F055: 20 E7    bra  $F03E
-;;
+;;???
 F057: 81 01    cmpa #$01
 F059: 25 2B    bcs  $F086
 F05B: 22 03    bhi  $F060
@@ -2244,11 +2250,13 @@ F158: 46       rora
 F159: 52       illegal
 F15A: 49       rola 
 F15B: 4F       clra 
-F15C: 20 CE    bra  $F12C
-F15E: F1 73 A6 cmpb $73A6
-F161: 00       illegal
+F15C: 20 
+;;
+F15D: CE F1 73 ldx  #$F173
+F160: A6 00    lda  (x+$00)
 F162: 26 01    bne  $F165
 F164: 39       rts  
+;;
 F165: 81 01    cmpa #$01
 F167: 27 07    beq  $F170
 F169: DF 82    stx  $82
@@ -2256,6 +2264,7 @@ F16B: BD F0 57 jsr  $F057
 F16E: DE 82    ldx  $82
 F170: 08       inx  
 F171: 20 ED    bra  $F160
+;;
 F173: 03       illegal
 F174: 06       tap  
 F175: 0A       clv  
