@@ -861,65 +861,17 @@ E42D: A4 25 FE FE 01 02 FE
 E434: FE 1A 00 00 00 08 6E 
 E43B: 82 22 00 00 00 18 C6 
 E442: 21 30 00 FF 30 20 0D
-E449: B2 10 05 sbca $1005
-E44C: 00       illegal
-E44D: 00       illegal
-E44E: 14       illegal
-E44F: A4 FF    anda (x+$FF)
-E451: 1F       illegal
-E452: 14       illegal
-E453: 01       nop  
-E454: 01       nop  
-E455: 04       illegal
-E456: 1C       illegal
-E457: 1C       illegal
-E458: 1F       illegal
-E459: 00       illegal
-E45A: FF FF 08 stx  $FF08
-E45D: 88 3D    eora #$3D
-E45F: 5C       incb 
-E460: 01       nop  
-E461: 01       nop  
-E462: 01       nop  
-E463: 02       illegal
-E464: 01       nop  
-E465: F4 15 00 andb $1500
-E468: 00       illegal
-E469: 00       illegal
-E46A: 08       inx  
-E46B: 1B       aba  
-E46C: 72       illegal
-E46D: 28 03    bvc  $E472
-E46F: 00       illegal
-E470: 02       illegal
-E471: 07       tpa  
-E472: 9A D1    ora  $D1
-E474: 12       illegal
-E475: 00       illegal
-E476: 00       illegal
-E477: 00       illegal
-E478: 0C       clc  
-E479: 00       illegal
-E47A: 3F       swi  
-E47B: 1F       illegal
-E47C: 11       cba  
-E47D: 01       nop  
-E47E: 07       tpa  
-E47F: 04       illegal
-E480: 1C       illegal
-E481: 1F       illegal
-E482: F6 FE FE ldb  $FEFE
-E485: FE 01 21 ldx  $0121
-E488: FF 15 01 stx  $1501
-E48B: 0A       clv  
-E48C: 01       nop  
-E48D: 03       illegal
-E48E: BC FF 16 cmpx $FF16
-E491: 00       illegal
-E492: 00       illegal
-E493: 00       illegal
-E494: 08       inx  
-E495: 88 
+E449: B2 10 05 00 00 14 A4 
+E450: FF 1F 14 01 01 04 1C
+E457: 1C 1F 00 FF FF 08 88
+E45E: 3D 5C 01 01 01 02 01
+E465: F4 15 00 00 00 08 1B
+E46C: 72 28 03 00 02 07 9A 
+E473: D1 12 00 00 00 0C 00
+E47A: 3F 1F 11 01 07 04 1C
+E481: 1F F6 FE FE FE 01 21
+E488: FF 15 01 0A 01 03 BC
+E48F: FF 16 00 00 00 08 88 
 ;;
 ;;GFRTAB
 E496: A0    eora #$A0
